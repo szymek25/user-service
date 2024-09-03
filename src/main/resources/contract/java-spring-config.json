@@ -1,0 +1,9 @@
+{
+  "modelPackage": "pl.szymanski.model",
+  "apiPackage": "pl.szymanski.api",
+  "invokerPackage": "pl.szymanski.invoker",
+  "library": "spring-cloud",
+  "dateLibrary": "java8",
+  "hideGenerationTimestamp": true,
+  "generateForOpenFeign" : true
+}

@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.2'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.hidetake.swagger.generator' version '2.19.2'
 }
 
 group = 'pl.szymanski'
@@ -22,10 +23,37 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.0'
+	implementation 'io.springfox:springfox-oas:3.0.0'
+	implementation 'org.springframework.cloud:spring-cloud-dependencies:2020.0.3'
+	implementation 'javax.validation:validation-api:1.1.0.Final'
+	implementation 'javax.servlet:javax.servlet-api:3.0.1'
+	implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	swaggerCodegen 'io.swagger.codegen.v3:swagger-codegen-cli:3.0.47'  // or Swagger Codegen V3
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+//https://github.com/int128/gradle-swagger-generator-plugin?tab=readme-ov-file#use-configuration-file
+swaggerSources {
+	keycloak {
+		inputFile = file("$rootDir/src/main/resources/contract/keycloak.yaml")
+		code {
+			language = 'spring'
+			configFile = file("$rootDir/src/main/resources/contract/java-spring-config.json")
+			components = ['models','apis','supportingFiles']
+			dependsOn validation
+			jvmArgs = ['--add-opens=java.base/java.util=ALL-UNNAMED']
+		}
+	}
+
+	compileJava.dependsOn swaggerSources.keycloak.code
+	sourceSets.main.java.srcDir "${swaggerSources.keycloak.code.outputDir}/src/main/java"
+	sourceSets.main.resources.srcDir "${swaggerSources.keycloak.code.outputDir}/src/main/resources"
+
 }

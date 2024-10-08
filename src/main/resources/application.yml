@@ -17,3 +17,4 @@ keycloak:
   realm: library
   serverUrl: http://keycloak:8080
   baseUrl: ${keycloak.serverUrl}/realms/${keycloak.realm}
+  adminApiPath: ${keycloak.serverUrl}/admin/realms

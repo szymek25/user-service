@@ -15,6 +15,9 @@ java {
 
 repositories {
 	mavenCentral()
+	flatDir {
+		dirs("libs")
+	}
 }
 
 dependencies {
@@ -24,6 +27,17 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'io.swagger:swagger-java-client-keycloak:1.0.0'
+	//dependencies required for swagger-jave-client-keycloak
+	implementation 'com.google.code.gson:gson:2.8.1'
+	implementation 'com.squareup.okhttp:okhttp:2.7.5'
+	implementation 'org.threeten:threetenbp:1.3.5'
+	implementation 'io.gsonfire:gson-fire:1.8.3'
+	implementation 'javax.annotation:javax.annotation-api:1.3.2'
+	implementation 'com.squareup.okhttp:logging-interceptor:2.7.5'
+	implementation 'com.squareup.okio:okio:1.6.0'
+	implementation 'io.swagger.core.v3:swagger-annotations:2.0.0'
+
 }
 
 tasks.named('test') {

@@ -6,6 +6,19 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${keycloak.baseUrl}/protocol/openid-connect/certs
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER}
+    hikari:
+      connectionTimeout: 30000
+      idleTimeout: 600000
+      maxLifetime: 1800000
+  jpa:
+    hibernate:
+      ddl-auto: update
+
 
 server:
   port: 8082

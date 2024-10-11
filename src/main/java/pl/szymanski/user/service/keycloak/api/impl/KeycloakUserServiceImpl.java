@@ -39,7 +39,7 @@ public class KeycloakUserServiceImpl extends AbstractKeycloakService implements 
 		int totalNumberOfUsers = getTotalNumberOfUsers();
 		if (totalNumberOfUsers == 0) {
 			return List.of();
-		} else if (totalNumberOfUsers > pageSize) {
+		} else if (totalNumberOfUsers < pageSize) {
 			return getUsers(0, totalNumberOfUsers);
 		} else {
 			final List<UserRepresentation> users = new ArrayList<>();

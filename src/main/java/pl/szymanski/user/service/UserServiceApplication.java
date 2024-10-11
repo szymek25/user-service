@@ -1,7 +1,9 @@
 package pl.szymanski.user.service;
 
 import io.swagger.client.ApiClient;
+import io.swagger.client.Configuration;
 import io.swagger.client.api.GroupApi;
+import io.swagger.client.api.UsersApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,17 +22,28 @@ public class UserServiceApplication {
 	private String keycloakAdminApiPath;
 
 	@Bean
-	public GroupApi groupApi() {
-		GroupApi apiInstance = new GroupApi();
-		ApiClient defaultClient = apiInstance.getApiClient();
+	public ApiClient apiClient() {
+		ApiClient defaultClient = Configuration.getDefaultApiClient();
 		defaultClient.setBasePath(keycloakAdminApiPath);
 		defaultClient.getHttpClient().networkInterceptors().add(accessTokenInterceptor());
 
-		return apiInstance;
+		return defaultClient;
 	}
 
 	@Bean
 	public AccessTokenInterceptor accessTokenInterceptor() {
 		return new AccessTokenInterceptor();
+	}
+
+	@Bean
+	public GroupApi groupApi(ApiClient apiClient) {
+		GroupApi apiInstance = new GroupApi(apiClient);
+		return apiInstance;
+	}
+
+	@Bean
+	public UsersApi usersApi(ApiClient apiClient) {
+		UsersApi apiInstance = new UsersApi(apiClient);
+		return apiInstance;
 	}
 }

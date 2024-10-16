@@ -6,7 +6,10 @@ import io.swagger.client.api.UsersApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.szymanski.user.service.oauth.AccessTokenInterceptor;
+import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
+import pl.szymanski.user.service.keycloak.api.impl.KeycloakUserServiceImpl;
+import pl.szymanski.user.service.oauth.AccessTokenForTechnicalCallsInterceptor;
+import pl.szymanski.user.service.oauth.AccessTokenFromCurrentRequestInterceptor;
 
 @Configuration
 public class KeycloakConfiguration {
@@ -16,28 +19,45 @@ public class KeycloakConfiguration {
 	private String keycloakAdminApiPath;
 
 	@Bean
-	public ApiClient apiClient() {
-		ApiClient defaultClient = io.swagger.client.Configuration.getDefaultApiClient();
+	public ApiClient apiClientForApiCalls() {
+		ApiClient defaultClient = new ApiClient();
 		defaultClient.setBasePath(keycloakAdminApiPath);
 		defaultClient.getHttpClient().networkInterceptors().add(accessTokenInterceptor());
 
 		return defaultClient;
 	}
 
-	@Bean
-	public AccessTokenInterceptor accessTokenInterceptor() {
-		return new AccessTokenInterceptor();
+	@Bean(name = "apiClientForTechnicalCalls")
+	public ApiClient apiClientForTechnicalCalls(AccessTokenForTechnicalCallsInterceptor interceptor) {
+		ApiClient defaultClient = new ApiClient();
+		defaultClient.setBasePath(keycloakAdminApiPath);
+		defaultClient.getHttpClient().networkInterceptors().add(interceptor);
+
+		return defaultClient;
 	}
 
 	@Bean
-	public GroupApi groupApi(ApiClient apiClient) {
-		GroupApi apiInstance = new GroupApi(apiClient);
-		return apiInstance;
+	public AccessTokenFromCurrentRequestInterceptor accessTokenInterceptor() {
+		return new AccessTokenFromCurrentRequestInterceptor();
 	}
 
 	@Bean
-	public UsersApi usersApi(ApiClient apiClient) {
-		UsersApi apiInstance = new UsersApi(apiClient);
-		return apiInstance;
+	public GroupApi groupApi() {
+		return new GroupApi(apiClientForApiCalls());
+	}
+
+	@Bean("usersApiForApiCalls")
+	public UsersApi usersApi() {
+		return new UsersApi(apiClientForApiCalls());
+	}
+
+	@Bean("usersApiForTechnicalCalls")
+	public UsersApi usersApiForTechnicalCalls(AccessTokenForTechnicalCallsInterceptor interceptor) {
+		return new UsersApi(apiClientForTechnicalCalls(interceptor));
+	}
+
+	@Bean("keycloakUserServiceForTechnicalCalls")
+	public KeycloakUserService keycloakUserService(AccessTokenForTechnicalCallsInterceptor interceptor) {
+		return new KeycloakUserServiceImpl(usersApiForTechnicalCalls(interceptor));
 	}
 }

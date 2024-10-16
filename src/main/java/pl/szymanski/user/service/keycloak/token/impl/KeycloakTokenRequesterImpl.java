@@ -1,5 +1,6 @@
 package pl.szymanski.user.service.keycloak.token.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,13 +31,21 @@ public class KeycloakTokenRequesterImpl implements KeycloakTokenRequester {
 	@Value("${keycloak.client-secret}")
 	private String clientSecret;
 
+	private String accessToken;
+
 	public String getAccessToken() {
-		final RestTemplate restTemplate = new RestTemplate();
-		HttpEntity<MultiValueMap<String, String>> request = prepareRequest();
+		if (StringUtils.isEmpty(accessToken)) {
+			final RestTemplate restTemplate = new RestTemplate();
+			HttpEntity<MultiValueMap<String, String>> request = prepareRequest();
 
-		final ResponseEntity<AccessToken> result = restTemplate.postForEntity(tokenUri , request, AccessToken.class);
+			final ResponseEntity<AccessToken> result = restTemplate.postForEntity(tokenUri, request, AccessToken.class);
 
-		return Objects.requireNonNull(result.getBody()).getTokenValue();
+			String tokenValue = Objects.requireNonNull(result.getBody()).getTokenValue();
+			this.accessToken = tokenValue;
+			return tokenValue;
+		} else {
+			return accessToken;
+		}
 	}
 
 	private HttpEntity<MultiValueMap<String, String>> prepareRequest() {
@@ -49,7 +58,7 @@ public class KeycloakTokenRequesterImpl implements KeycloakTokenRequester {
 	}
 
 	private MultiValueMap<String, String> prepareRequestParams() {
-		MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 		map.add(CLIENT_ID, clientId);
 		map.add(CLIENT_SECRET, clientSecret);
 		map.add(GRANT_TYPE, CLIENT_CREDENTIALS);

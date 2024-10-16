@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pl.szymanski.user.service.mapper.helper.UserMapperHelper;
 import pl.szymanski.user.service.model.User;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
 
@@ -19,6 +21,8 @@ public abstract class UserMapper {
 	@Mapping(target = "town", expression = "java(helper.mapStringAttribute(userRepresentation, pl.szymanski.user.service.constants.ApplicationConstants.KeyCloak.TOWN))")
 	@Mapping(target = "postalCode", expression = "java(helper.mapStringAttribute(userRepresentation, pl.szymanski.user.service.constants.ApplicationConstants.KeyCloak.POSTAL_CODE))")
 	@Mapping(target = "dayOfBirth", expression = "java(helper.mapBirthDate(userRepresentation))")
-	@Mapping(target = "id", expression = "java(helper.mapStringAttribute(userRepresentation, pl.szymanski.user.service.constants.ApplicationConstants.KeyCloak.UUID))")
 	public abstract User map(UserRepresentation userRepresentation);
+
+	public abstract List<User> map(List<UserRepresentation> userRepresentation);
+
 }

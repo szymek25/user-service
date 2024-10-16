@@ -3,22 +3,23 @@ package pl.szymanski.user.service.keycloak.api.impl;
 import io.swagger.client.ApiException;
 import io.swagger.client.api.UsersApi;
 import io.swagger.client.model.UserRepresentation;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import pl.szymanski.user.service.keycloak.api.AbstractKeycloakService;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@RequiredArgsConstructor
 public class KeycloakUserServiceImpl extends AbstractKeycloakService implements KeycloakUserService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(KeycloakUserServiceImpl.class);
-	@Autowired
+
+	@NonNull
 	private UsersApi usersApi;
 
 	@Value("${keycloak.users.pageSize}")

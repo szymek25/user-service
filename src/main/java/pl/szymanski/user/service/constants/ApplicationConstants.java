@@ -11,6 +11,6 @@ public class ApplicationConstants {
 		public static final String BIRTHDATE = "dayOfBirth";
 		public static final String TOWN = "town";
 		public static final String POSTAL_CODE = "postalCode";
-		public static final String UUID = "sub";
+		public static final String UUID = "id";
 	}
 }

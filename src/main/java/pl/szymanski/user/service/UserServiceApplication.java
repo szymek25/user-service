@@ -17,33 +17,4 @@ public class UserServiceApplication {
 		SpringApplication.run(UserServiceApplication.class, args);
 	}
 
-
-	@Value("${keycloak.admin-api-path}")
-	private String keycloakAdminApiPath;
-
-	@Bean
-	public ApiClient apiClient() {
-		ApiClient defaultClient = Configuration.getDefaultApiClient();
-		defaultClient.setBasePath(keycloakAdminApiPath);
-		defaultClient.getHttpClient().networkInterceptors().add(accessTokenInterceptor());
-
-		return defaultClient;
-	}
-
-	@Bean
-	public AccessTokenInterceptor accessTokenInterceptor() {
-		return new AccessTokenInterceptor();
-	}
-
-	@Bean
-	public GroupApi groupApi(ApiClient apiClient) {
-		GroupApi apiInstance = new GroupApi(apiClient);
-		return apiInstance;
-	}
-
-	@Bean
-	public UsersApi usersApi(ApiClient apiClient) {
-		UsersApi apiInstance = new UsersApi(apiClient);
-		return apiInstance;
-	}
 }

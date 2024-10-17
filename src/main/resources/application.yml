@@ -31,3 +31,8 @@ keycloak:
   serverUrl: http://keycloak:8080
   baseUrl: ${keycloak.serverUrl}/realms/${keycloak.realm}
   adminApiPath: ${keycloak.serverUrl}/admin/realms
+  client-id: user-service
+  client-secret: ${USER_SERVICE_CLIENT_SECRET:''}
+  tokenUri: ${keycloak.baseUrl}/protocol/openid-connect/token
+  users:
+    pageSize: 100

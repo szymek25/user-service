@@ -35,4 +35,4 @@ keycloak:
   client-secret: ${USER_SERVICE_CLIENT_SECRET:''}
   tokenUri: ${keycloak.baseUrl}/protocol/openid-connect/token
   users:
-    pageSize: 5
+    pageSize: 100

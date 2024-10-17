@@ -2,6 +2,8 @@ package pl.szymanski.user.service.constants;
 
 public class ApplicationConstants {
 
+	public static final String USER_ROLE_NAME = "ROLE_USER";
+
 	public class KeyCloak {
 		public static final String EMAIL = "email";
 		public static final String FIRST_NAME = "firstName";

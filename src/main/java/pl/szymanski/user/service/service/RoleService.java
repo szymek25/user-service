@@ -9,4 +9,7 @@ public interface RoleService {
 	void saveAll(List<Role> roleList);
 
 	void deleteAll();
+
+	Role getByName(String name);
+
 }

@@ -23,4 +23,9 @@ public class RoleServiceImpl implements RoleService {
 	public void deleteAll() {
 		roleDao.deleteAll();
 	}
+
+	@Override
+	public Role getByName(String name) {
+		return roleDao.findByName(name);
+	}
 }

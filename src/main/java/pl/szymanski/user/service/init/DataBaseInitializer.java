@@ -13,13 +13,16 @@ import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
 import pl.szymanski.user.service.mapper.RoleGroupRepresentationMapper;
 import pl.szymanski.user.service.mapper.UserMapper;
 import pl.szymanski.user.service.model.InitState;
+import pl.szymanski.user.service.model.Role;
 import pl.szymanski.user.service.model.User;
 import pl.szymanski.user.service.service.InitStateService;
 import pl.szymanski.user.service.service.RoleService;
 import pl.szymanski.user.service.service.UserService;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class DataBaseInitializer {
@@ -49,7 +52,7 @@ public class DataBaseInitializer {
 	@EventListener(ApplicationReadyEvent.class)
 	public void doSomethingAfterStartup() {
 		InitState latestInitState = initStateService.getLatestInitState();
-		if(latestInitState == null || !latestInitState.isInitialized()) {
+		if (latestInitState == null || !latestInitState.isInitialized()) {
 			LOG.info("Starting initialization of DB");
 			storeUsers();
 			storeGroups();
@@ -65,7 +68,31 @@ public class DataBaseInitializer {
 		roleService.deleteAll();
 		List<GroupRepresentation> groupRepresentations = keycloakGroupService.getGroups();
 		LOG.info("Saving groups to DB");
-		roleService.saveAll(roleGroupRepresentationMapper.groupRepresentationsToRoles(groupRepresentations));
+		List<Role> roleList = roleGroupRepresentationMapper.groupRepresentationsToRoles(groupRepresentations);
+		roleService.saveAll(roleList);
+		assignUsersToRoles(roleList);
+	}
+
+	private void assignUsersToRoles(List<Role> roleList) {
+		LOG.info("Assigning users to roles");
+		Map<Role, List<String>> roleToUserIdsMap = new HashMap<>();
+		roleList.forEach(role -> {
+			List<UserRepresentation> membersOfGroup = keycloakGroupService.getMembersOfGroup(role.getId());
+			List<String> userIds = membersOfGroup.stream().map(UserRepresentation::getId).toList();
+			roleToUserIdsMap.put(role, userIds);
+		});
+		roleToUserIdsMap.forEach((role, userIds) -> {
+			List<User> users = userService.findAllById(userIds);
+			users.forEach(user -> {
+				if (user.getRole() == null) {
+					user.setRole(role);
+				} else {
+					LOG.warn("User {} already has role {}. For proper processing please check keycloak settings", user.getId(), user.getRole().getName());
+				}
+			});
+			userService.saveAll(users);
+		});
+		LOG.info("Users assigned to roles");
 	}
 
 	private void saveInitState() {

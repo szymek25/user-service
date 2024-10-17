@@ -3,6 +3,7 @@ package pl.szymanski.user.service.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,5 +44,7 @@ public class User {
 	@Column
 	private String postalCode;
 
+	@ManyToOne
+	private Role role;
 
 }

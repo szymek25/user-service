@@ -1,6 +1,7 @@
 package pl.szymanski.user.service.config;
 
 import io.swagger.client.ApiClient;
+import io.swagger.client.api.GroupApi;
 import io.swagger.client.api.GroupsApi;
 import io.swagger.client.api.UsersApi;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,6 +66,12 @@ public class KeycloakConfiguration {
 
 	@Bean("keycloakGroupServiceForTechnicalCalls")
 	public KeycloakGroupService keycloakGroupServiceForTechnicalCalls(AccessTokenForTechnicalCallsInterceptor interceptor) {
-		return new KeycloakGroupServiceImpl(groupsApi(interceptor));
+		return new KeycloakGroupServiceImpl(groupsApi(interceptor), groupApi(interceptor));
 	}
+
+	@Bean
+	public GroupApi groupApi(AccessTokenForTechnicalCallsInterceptor interceptor) {
+		return new GroupApi(apiClientForTechnicalCalls(interceptor));
+	}
+
 }

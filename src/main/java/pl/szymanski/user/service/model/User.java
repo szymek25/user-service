@@ -2,6 +2,8 @@ package pl.szymanski.user.service.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -18,7 +20,11 @@ public class User {
 
 	@Id
 	@Column(unique = true)
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@Column
+	private String keycloakId;
 
 	@Column
 	private String email;

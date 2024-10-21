@@ -40,7 +40,7 @@ public class UserMapperTest {
 		Assertions.assertEquals("Springfield", user.getTown());
 		Assertions.assertEquals("12345", user.getPostalCode());
 		Assertions.assertEquals("1990-01-01", user.getDayOfBirth().toString());
-		Assertions.assertEquals("123456789", user.getId());
+		Assertions.assertEquals("123456789", user.getKeycloakId());
 	}
 
 

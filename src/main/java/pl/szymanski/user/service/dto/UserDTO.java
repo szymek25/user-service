@@ -11,7 +11,7 @@ import java.sql.Date;
 @Getter
 public class UserDTO {
 
-	private String id;
+	private int id;
 
 	private String email;
 
@@ -30,5 +30,7 @@ public class UserDTO {
 	private String postalCode;
 
 	private String roleId;
+
+	private String keycloakId;
 
 }

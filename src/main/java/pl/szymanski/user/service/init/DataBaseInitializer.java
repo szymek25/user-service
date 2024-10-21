@@ -82,7 +82,7 @@ public class DataBaseInitializer {
 			roleToUserIdsMap.put(role, userIds);
 		});
 		roleToUserIdsMap.forEach((role, userIds) -> {
-			List<User> users = userService.findAllById(userIds);
+			List<User> users = userService.findAllByKeycloakId(userIds);
 			users.forEach(user -> {
 				if (user.getRole() == null) {
 					user.setRole(role);

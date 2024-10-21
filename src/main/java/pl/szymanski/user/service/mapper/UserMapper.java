@@ -21,7 +21,9 @@ public abstract class UserMapper {
 	@Mapping(target = "town", expression = "java(helper.mapStringAttribute(userRepresentation, pl.szymanski.user.service.constants.ApplicationConstants.KeyCloak.TOWN))")
 	@Mapping(target = "postalCode", expression = "java(helper.mapStringAttribute(userRepresentation, pl.szymanski.user.service.constants.ApplicationConstants.KeyCloak.POSTAL_CODE))")
 	@Mapping(target = "dayOfBirth", expression = "java(helper.mapBirthDate(userRepresentation))")
-	@Mapping(target ="role", ignore = true)
+	@Mapping(target = "role", ignore = true)
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "keycloakId", source = "userRepresentation.id")
 	public abstract User map(UserRepresentation userRepresentation);
 
 	public abstract List<User> map(List<UserRepresentation> userRepresentation);

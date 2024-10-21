@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> findAllById(List<String> ids) {
-		return userDao.findAllById(ids);
+	public List<User> findAllByKeycloakId(List<String> ids) {
+		return userDao.findAllByKeycloakId(ids);
 	}
 
 	@Override

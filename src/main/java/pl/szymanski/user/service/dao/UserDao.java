@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface UserDao extends CrudRepository<User, String> {
 
-	@Query("SELECT u FROM User u WHERE u.id IN :ids")
-	List<User> findAllById(List<String> ids);
+	@Query("SELECT u FROM User u WHERE u.keycloakId IN :ids")
+	List<User> findAllByKeycloakId(List<String> ids);
 
 	Page<User> findByRole(Pageable pageable, Role role);
 

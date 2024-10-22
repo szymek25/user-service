@@ -29,7 +29,8 @@ public class UserMapperTest {
 		userRepresentation.setFirstName("John");
 		userRepresentation.setLastName("Doe");
 		userRepresentation.setEmail("john.doe@example.com");
-		userRepresentation.setAttributes(Map.of(ApplicationConstants.KeyCloak.PHONE, List.of("123456789"), ApplicationConstants.KeyCloak.ADDRESS_LINE_1, List.of("Main St. 123"), ApplicationConstants.KeyCloak.TOWN, List.of("Springfield"), ApplicationConstants.KeyCloak.POSTAL_CODE, List.of("12345"),ApplicationConstants.KeyCloak.BIRTHDATE, List.of("1990-01-01"), ApplicationConstants.KeyCloak.UUID, List.of("123456789")));
+		userRepresentation.setId("123456789");
+		userRepresentation.setAttributes(Map.of(ApplicationConstants.KeyCloak.PHONE, List.of("123456789"), ApplicationConstants.KeyCloak.ADDRESS_LINE_1, List.of("Main St. 123"), ApplicationConstants.KeyCloak.TOWN, List.of("Springfield"), ApplicationConstants.KeyCloak.POSTAL_CODE, List.of("12345"),ApplicationConstants.KeyCloak.BIRTHDATE, List.of("1990-01-01")));
 
 		User user = userMapper.map(userRepresentation);
 		Assertions.assertEquals("John", user.getName());

@@ -50,7 +50,7 @@ public class DataBaseInitializer {
 	private RoleService roleService;
 
 	@EventListener(ApplicationReadyEvent.class)
-	public void doSomethingAfterStartup() {
+	public void initializeDBAfterStartup() {
 		InitState latestInitState = initStateService.getLatestInitState();
 		if (latestInitState == null || !latestInitState.isInitialized()) {
 			LOG.info("Starting initialization of DB");

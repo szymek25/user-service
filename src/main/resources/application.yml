@@ -36,3 +36,7 @@ keycloak:
   tokenUri: ${keycloak.baseUrl}/protocol/openid-connect/token
   users:
     pageSize: 100
+
+user-service:
+  initial-load:
+    enabled: true

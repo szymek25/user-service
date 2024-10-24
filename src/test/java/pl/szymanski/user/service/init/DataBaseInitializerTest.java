@@ -3,12 +3,14 @@ package pl.szymanski.user.service.init;
 import io.swagger.client.model.GroupRepresentation;
 import io.swagger.client.model.UserRepresentation;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import pl.szymanski.user.service.keycloak.api.KeycloakGroupService;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
 import pl.szymanski.user.service.mapper.RoleGroupRepresentationMapper;
@@ -57,6 +59,11 @@ public class DataBaseInitializerTest {
 
 	@Mock
 	private RoleService roleService;
+
+	@BeforeEach
+	public void setUp() {
+		ReflectionTestUtils.setField(dataBaseInitializer, "initialLoadEnabled", true);
+	}
 
 	@Test
 	public void testInitWhenDBAlreadyInitialized() {

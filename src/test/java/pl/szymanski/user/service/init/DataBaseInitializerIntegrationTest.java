@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@SpringBootTest(properties = {"user-service.initial-load.enabled=true"})
 @ExtendWith(OutputCaptureExtension.class)
 public class DataBaseInitializerIntegrationTest {
 

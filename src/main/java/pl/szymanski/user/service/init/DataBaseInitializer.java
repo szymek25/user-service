@@ -5,6 +5,7 @@ import io.swagger.client.model.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -49,17 +50,22 @@ public class DataBaseInitializer {
 	@Autowired
 	private RoleService roleService;
 
+	@Value("${user-service.initial-load.enabled}")
+	private boolean initialLoadEnabled;
+
 	@EventListener(ApplicationReadyEvent.class)
 	public void initializeDBAfterStartup() {
-		InitState latestInitState = initStateService.getLatestInitState();
-		if (latestInitState == null || !latestInitState.isInitialized()) {
-			LOG.info("Starting initialization of DB");
-			storeUsers();
-			storeGroups();
-			saveInitState();
-			LOG.info("DB initialized");
-		} else {
-			LOG.info("DB already initialized");
+		if(initialLoadEnabled) {
+			InitState latestInitState = initStateService.getLatestInitState();
+			if (latestInitState == null || !latestInitState.isInitialized()) {
+				LOG.info("Starting initialization of DB");
+				storeUsers();
+				storeGroups();
+				saveInitState();
+				LOG.info("DB initialized");
+			} else {
+				LOG.info("DB already initialized");
+			}
 		}
 	}
 
@@ -110,4 +116,5 @@ public class DataBaseInitializer {
 		LOG.info("Saving users to DB");
 		userService.saveAll(map);
 	}
+
 }

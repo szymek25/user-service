@@ -14,5 +14,6 @@ public class ApplicationConstants {
 		public static final String TOWN = "town";
 		public static final String POSTAL_CODE = "postalCode";
 		public static final String UUID = "id";
+		public static final String RESOURCE_TYPE_USER = "USER";
 	}
 }

@@ -73,6 +73,7 @@ public class KeycloakUserFacadeImpl implements KeycloakUserFacade {
 		existingUser.setName(user.getName());
 		existingUser.setPhone(user.getPhone());
 		existingUser.setTown(user.getTown());
+		existingUser.setPostalCode(user.getPostalCode());
 	}
 
 	private User mapUserToObject(final KeycloakAdminEventDTO event) {

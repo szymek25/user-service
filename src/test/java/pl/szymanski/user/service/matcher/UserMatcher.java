@@ -16,7 +16,8 @@ public class UserMatcher implements ArgumentMatcher<User> {
 		return user.getKeycloakId().equals(argument.getKeycloakId()) && user.getName().equals(argument.getName())
 				&& user.getLastName().equals(argument.getLastName()) && user.getEmail().equals(argument.getEmail())
 				&& user.getPhone().equals(argument.getPhone()) && user.getTown().equals(argument.getTown())
-				&& user.getDayOfBirth().equals(argument.getDayOfBirth()) && user.getAddressLine1().equals(argument.getAddressLine1());
+				&& user.getDayOfBirth().equals(argument.getDayOfBirth()) && user.getAddressLine1().equals(argument.getAddressLine1())
+				&& user.getPostalCode().equals(argument.getPostalCode());
 	}
 
 }

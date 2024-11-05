@@ -4,6 +4,6 @@ import pl.szymanski.user.service.dto.KeycloakAdminEventDTO;
 
 public interface KeycloakUserFacade {
 
-	void updateOrCreateUser(KeycloakAdminEventDTO event);
+	void processUserUpdate(KeycloakAdminEventDTO event);
 
 }

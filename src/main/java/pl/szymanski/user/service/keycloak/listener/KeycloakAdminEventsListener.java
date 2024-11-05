@@ -30,7 +30,7 @@ public class KeycloakAdminEventsListener {
 			KeycloakAdminEventDTO adminEvent = objectMapper.readValue(String.valueOf(object), KeycloakAdminEventDTO.class);
 			log.debug("Keycloak event received: {}", adminEvent);
 			if (RESOURCE_TYPE_USER.equals(adminEvent.getResourceType())) {
-				keycloakUserFacade.updateOrCreateUser(adminEvent);
+				keycloakUserFacade.processUserUpdate(adminEvent);
 			}
 		} catch (JsonProcessingException f) {
 			log.warn("Unknown type received: " + object, f);

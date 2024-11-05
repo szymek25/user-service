@@ -43,4 +43,19 @@ public class UserServiceImpl implements UserService {
 		return userDao.findByRole(pageable, userRole);
 
 	}
+
+	@Override
+	public User findByKeycloakId(String id) {
+		return userDao.findByKeycloakId(id);
+	}
+
+	@Override
+	public void save(User user) {
+		userDao.save(user);
+	}
+
+	@Override
+	public void delete(String keycloakId) {
+		userDao.deleteByKeycloakId(keycloakId);
+	}
 }

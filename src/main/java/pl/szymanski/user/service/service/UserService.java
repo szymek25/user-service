@@ -13,4 +13,10 @@ public interface UserService {
 	List<User> findAllByKeycloakId(List<String> ids);
 
 	Page<User> findCustomers(Pageable pageable);
+
+	User findByKeycloakId(String id);
+
+	void save(User user);
+
+	void delete(String keycloakId);
 }

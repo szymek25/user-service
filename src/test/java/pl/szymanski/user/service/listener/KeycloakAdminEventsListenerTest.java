@@ -29,7 +29,7 @@ public class KeycloakAdminEventsListenerTest {
 		map.put("resourceType", "USER");
 		keycloakAdminEventsListener.defaultEventHandler(new JSONObject(map));
 
-		Mockito.verify(keycloakUserFacade, Mockito.times(1)).updateOrCreateUser(Mockito.any(KeycloakAdminEventDTO.class));
+		Mockito.verify(keycloakUserFacade, Mockito.times(1)).processUserUpdate(Mockito.any(KeycloakAdminEventDTO.class));
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class KeycloakAdminEventsListenerTest {
 		map.put("resourceType", "NOT_USER");
 		keycloakAdminEventsListener.defaultEventHandler(new JSONObject(map));
 
-		Mockito.verify(keycloakUserFacade, Mockito.times(0)).updateOrCreateUser(Mockito.any(KeycloakAdminEventDTO.class));
+		Mockito.verify(keycloakUserFacade, Mockito.times(0)).processUserUpdate(Mockito.any(KeycloakAdminEventDTO.class));
 	}
 
 }

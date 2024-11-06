@@ -77,7 +77,6 @@ public class KeycloakUserFacadeImplIntegrationTest {
 
 	private KeycloakAdminEventDTO prepareKeycloakAdminEventDTO(final String operationType, final String resourceType, final String keycloakId) throws JSONException {
 		final Map<String, String> map = new HashMap<>();
-		map.put("id", keycloakId);
 		map.put("email", TEST_EMAIL);
 		map.put("firstName", TEST_NAME);
 		map.put("lastName", TEST_LAST_NAME);
@@ -94,6 +93,7 @@ public class KeycloakUserFacadeImplIntegrationTest {
 		keycloakAdminEventDTO.setOperationType(operationType);
 		keycloakAdminEventDTO.setResourceType(resourceType);
 		keycloakAdminEventDTO.setRepresentation(representationJson.toString());
+		keycloakAdminEventDTO.setResourcePath("users/" + keycloakId);
 
 		return keycloakAdminEventDTO;
 	}

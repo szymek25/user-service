@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 public class KeycloakUserFacadeImplTest {
 
 	private static final String SAMPLE_ID = "eee-f11-ff";
-	public static final User STUB_USER_FROM_UPDATE_EVENT = createStubUser(SAMPLE_ID, "updated@test.com", "Updated name", "Updated lastname", "987654321", "Updated line", "Updated town", "54321", "1995-03-01");
+	public static final User STUB_USER_FROM_UPDATE_EVENT = createStubUser("", "updated@test.com", "Updated name", "Updated lastname", "987654321", "Updated line", "Updated town", "54321", "1995-03-01");
 
 	private static final User STUB_USER_IN_DB = createStubUser(SAMPLE_ID, "test@test.com", "John", "Doe", "123456789", "Test", "Test", "12345", "1990-01-01");
 	@InjectMocks
@@ -123,13 +123,10 @@ public class KeycloakUserFacadeImplTest {
 	}
 
 	private KeycloakAdminEventDTO prepareKeycloakAdminEventDTO(String operationType, String resourceType, String keycloakId) {
-		Map<String, String> map = new HashMap<>();
-		map.put("id", keycloakId);
-
 		KeycloakAdminEventDTO keycloakAdminEventDTO = new KeycloakAdminEventDTO();
 		keycloakAdminEventDTO.setOperationType(operationType);
 		keycloakAdminEventDTO.setResourceType(resourceType);
-		keycloakAdminEventDTO.setRepresentation(new JSONObject(map).toString());
+		keycloakAdminEventDTO.setResourcePath("users/" + keycloakId);
 
 		return keycloakAdminEventDTO;
 	}

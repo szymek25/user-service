@@ -18,4 +18,6 @@ public class KeycloakAdminEventDTO {
 
 	private String representation;
 
+	private String resourcePath;
+
 }

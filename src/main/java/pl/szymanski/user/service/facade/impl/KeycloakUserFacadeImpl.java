@@ -81,9 +81,17 @@ public class KeycloakUserFacadeImpl implements KeycloakUserFacade {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		try {
 			final UserRepresentation userRepresentation = mapper.readValue(event.getRepresentation(), UserRepresentation.class);
-			return userMapper.map(userRepresentation);
+			final User mappedUser = userMapper.map(userRepresentation);
+			final String keycloakId = getKeycloakIdFromEvent(event);
+			mappedUser.setKeycloakId(keycloakId);
+			return mappedUser;
 		} catch (JsonProcessingException e) {
 			throw new IllegalArgumentException("Could not map user from event: %s".formatted(event), e);
 		}
+	}
+
+	private String getKeycloakIdFromEvent(final KeycloakAdminEventDTO event) {
+		final String resourcePath = event.getResourcePath();
+		return resourcePath.split("/")[1];
 	}
 }

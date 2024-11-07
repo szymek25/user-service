@@ -123,9 +123,12 @@ public class KeycloakUserFacadeImplTest {
 	}
 
 	private KeycloakAdminEventDTO prepareKeycloakAdminEventDTO(String operationType, String resourceType, String keycloakId) {
+		Map<String, String> map = new HashMap<>();
+
 		KeycloakAdminEventDTO keycloakAdminEventDTO = new KeycloakAdminEventDTO();
 		keycloakAdminEventDTO.setOperationType(operationType);
 		keycloakAdminEventDTO.setResourceType(resourceType);
+		keycloakAdminEventDTO.setRepresentation(new JSONObject(map).toString());
 		keycloakAdminEventDTO.setResourcePath("users/" + keycloakId);
 
 		return keycloakAdminEventDTO;

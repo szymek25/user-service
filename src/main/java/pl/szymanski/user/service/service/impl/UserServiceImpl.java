@@ -58,4 +58,10 @@ public class UserServiceImpl implements UserService {
 	public void delete(String keycloakId) {
 		userDao.deleteByKeycloakId(keycloakId);
 	}
+
+	@Override
+	public void assignRole(User user, Role role) {
+		user.setRole(role);
+		userDao.save(user);
+	}
 }

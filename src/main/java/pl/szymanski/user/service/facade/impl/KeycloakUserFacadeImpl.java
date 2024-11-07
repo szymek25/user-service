@@ -13,14 +13,13 @@ import pl.szymanski.user.service.mapper.UserMapper;
 import pl.szymanski.user.service.model.User;
 import pl.szymanski.user.service.service.UserService;
 
-import java.util.Arrays;
-import java.util.List;
+import static helper.KeycloakAdminEventHelper.checkIfEventTypeIsDelete;
+import static helper.KeycloakAdminEventHelper.checkIfEventTypeIsUpdateOrCreate;
+import static helper.KeycloakAdminEventHelper.getKeycloakUserIdFromEvent;
+import static helper.KeycloakAdminEventHelper.validateEvent;
 
 @Component
 public class KeycloakUserFacadeImpl implements KeycloakUserFacade {
-
-	private static final List<String> VALID_EVENT_TYPES = Arrays.asList(ApplicationConstants.KeyCloak.EVENT_TYPE_CREATE,
-			ApplicationConstants.KeyCloak.EVENT_TYPE_UPDATE, ApplicationConstants.KeyCloak.EVENT_TYPE_DELETE);
 
 	@Autowired
 	private UserService userService;
@@ -30,7 +29,7 @@ public class KeycloakUserFacadeImpl implements KeycloakUserFacade {
 
 	@Override
 	public void processUserUpdate(final KeycloakAdminEventDTO event) {
-		validateEvent(event);
+		validateEvent(event, ApplicationConstants.KeyCloak.RESOURCE_TYPE_USER);
 
 		final User user = mapUserToObject(event);
 		if (checkIfEventTypeIsUpdateOrCreate(event)) {
@@ -46,23 +45,6 @@ public class KeycloakUserFacadeImpl implements KeycloakUserFacade {
 		}
 
 
-	}
-
-	private static void validateEvent(final KeycloakAdminEventDTO event) {
-		if (!ApplicationConstants.KeyCloak.RESOURCE_TYPE_USER.equals(event.getResourceType())) {
-			throw new IllegalArgumentException("Resource type: %s is not supported, could not process event. Supported resource type is: %s".formatted(event.getResourceType(), ApplicationConstants.KeyCloak.RESOURCE_TYPE_USER));
-		}
-		if (!VALID_EVENT_TYPES.contains(event.getOperationType())) {
-			throw new IllegalArgumentException("Operation type: %s is not valid, could not process event".formatted(event.getOperationType()));
-		}
-	}
-
-	private static boolean checkIfEventTypeIsDelete(final KeycloakAdminEventDTO event) {
-		return ApplicationConstants.KeyCloak.EVENT_TYPE_DELETE.equals(event.getOperationType());
-	}
-
-	private static boolean checkIfEventTypeIsUpdateOrCreate(final KeycloakAdminEventDTO event) {
-		return ApplicationConstants.KeyCloak.EVENT_TYPE_UPDATE.equals(event.getOperationType()) || ApplicationConstants.KeyCloak.EVENT_TYPE_CREATE.equals(event.getOperationType());
 	}
 
 	private void updateUser(final User existingUser, final User user) {
@@ -82,7 +64,7 @@ public class KeycloakUserFacadeImpl implements KeycloakUserFacade {
 		try {
 			final UserRepresentation userRepresentation = mapper.readValue(event.getRepresentation(), UserRepresentation.class);
 			final User mappedUser = userMapper.map(userRepresentation);
-			final String keycloakId = getKeycloakIdFromEvent(event);
+			final String keycloakId = getKeycloakUserIdFromEvent(event);
 			mappedUser.setKeycloakId(keycloakId);
 			return mappedUser;
 		} catch (JsonProcessingException e) {
@@ -90,8 +72,4 @@ public class KeycloakUserFacadeImpl implements KeycloakUserFacade {
 		}
 	}
 
-	private String getKeycloakIdFromEvent(final KeycloakAdminEventDTO event) {
-		final String resourcePath = event.getResourcePath();
-		return resourcePath.split("/")[1];
-	}
 }

@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.szymanski.user.service.dto.KeycloakAdminEventDTO;
+import pl.szymanski.user.service.facade.KeycloakGroupFacade;
 import pl.szymanski.user.service.facade.KeycloakUserFacade;
 import pl.szymanski.user.service.keycloak.listener.KeycloakAdminEventsListener;
 
@@ -22,6 +23,9 @@ public class KeycloakAdminEventsListenerTest {
 
 	@Mock
 	private KeycloakUserFacade keycloakUserFacade;
+
+	@Mock
+	private KeycloakGroupFacade keycloakGroupFacade;
 
 	@Test
 	public void shouldProcessIfResourceTypeIsUser() {
@@ -39,6 +43,15 @@ public class KeycloakAdminEventsListenerTest {
 		keycloakAdminEventsListener.defaultEventHandler(new JSONObject(map));
 
 		Mockito.verify(keycloakUserFacade, Mockito.times(0)).processUserUpdate(Mockito.any(KeycloakAdminEventDTO.class));
+		Mockito.verify(keycloakGroupFacade, Mockito.times(0)).processGroupUpdate(Mockito.any(KeycloakAdminEventDTO.class));
 	}
 
+	@Test
+	public void shouldProcessIfResourceTypeIsGroupMembership() {
+		Map<String, String> map = new HashMap<>();
+		map.put("resourceType", "GROUP_MEMBERSHIP");
+		keycloakAdminEventsListener.defaultEventHandler(new JSONObject(map));
+
+		Mockito.verify(keycloakGroupFacade, Mockito.times(1)).processGroupUpdate(Mockito.any(KeycloakAdminEventDTO.class));
+	}
 }

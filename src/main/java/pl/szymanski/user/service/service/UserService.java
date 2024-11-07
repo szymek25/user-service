@@ -2,6 +2,7 @@ package pl.szymanski.user.service.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import pl.szymanski.user.service.model.Role;
 import pl.szymanski.user.service.model.User;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface UserService {
 	void save(User user);
 
 	void delete(String keycloakId);
+
+	void assignRole(User user, Role role);
 }

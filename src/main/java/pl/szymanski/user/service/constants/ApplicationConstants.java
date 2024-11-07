@@ -15,6 +15,7 @@ public class ApplicationConstants {
 		public static final String POSTAL_CODE = "postalCode";
 		public static final String UUID = "id";
 		public static final String RESOURCE_TYPE_USER = "USER";
+		public static final String RESOURCE_TYPE_GROUP_MEMBERSHIP = "GROUP_MEMBERSHIP";
 		public static final String EVENT_TYPE_CREATE = "CREATE";
 		public static final String EVENT_TYPE_UPDATE = "UPDATE";
 		public static final String EVENT_TYPE_DELETE = "DELETE";

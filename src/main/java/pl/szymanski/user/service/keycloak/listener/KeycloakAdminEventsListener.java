@@ -10,8 +10,10 @@ import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import pl.szymanski.user.service.dto.KeycloakAdminEventDTO;
+import pl.szymanski.user.service.facade.KeycloakGroupFacade;
 import pl.szymanski.user.service.facade.KeycloakUserFacade;
 
+import static pl.szymanski.user.service.constants.ApplicationConstants.KeyCloak.RESOURCE_TYPE_GROUP_MEMBERSHIP;
 import static pl.szymanski.user.service.constants.ApplicationConstants.KeyCloak.RESOURCE_TYPE_USER;
 
 @Component
@@ -22,15 +24,21 @@ public class KeycloakAdminEventsListener {
 	@Autowired
 	private KeycloakUserFacade keycloakUserFacade;
 
+	@Autowired
+	private KeycloakGroupFacade keycloakGroupFacade;
+
 	@KafkaHandler(isDefault = true)
-	public void defaultEventHandler(Object object) {
-		ObjectMapper objectMapper = new ObjectMapper();
+	public void defaultEventHandler(final Object object) {
+		final ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		try {
-			KeycloakAdminEventDTO adminEvent = objectMapper.readValue(String.valueOf(object), KeycloakAdminEventDTO.class);
+			final KeycloakAdminEventDTO adminEvent = objectMapper.readValue(String.valueOf(object), KeycloakAdminEventDTO.class);
 			log.debug("Keycloak event received: {}", adminEvent);
-			if (RESOURCE_TYPE_USER.equals(adminEvent.getResourceType())) {
-				keycloakUserFacade.processUserUpdate(adminEvent);
+			final String resourceType = adminEvent.getResourceType();
+			switch (resourceType) {
+				case RESOURCE_TYPE_USER -> keycloakUserFacade.processUserUpdate(adminEvent);
+				case RESOURCE_TYPE_GROUP_MEMBERSHIP -> keycloakGroupFacade.processGroupUpdate(adminEvent);
+				default -> log.warn("Unknown resource type received: {}", resourceType);
 			}
 		} catch (JsonProcessingException f) {
 			log.warn("Unknown type received: " + object, f);

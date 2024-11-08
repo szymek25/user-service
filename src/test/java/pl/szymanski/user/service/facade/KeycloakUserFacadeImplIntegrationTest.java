@@ -1,11 +1,13 @@
 package pl.szymanski.user.service.facade;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.dto.KeycloakAdminEventDTO;
 import pl.szymanski.user.service.model.User;
 import pl.szymanski.user.service.service.UserService;
@@ -37,6 +39,7 @@ public class KeycloakUserFacadeImplIntegrationTest {
 	private UserService userService;
 
 	@Test
+	@Sql(scripts = "/scripts/users.sql")
 	public void shouldCreateUser() throws JSONException {
 		final String sampleKeycloakId = "1ff-1ff-1ff";
 		final KeycloakAdminEventDTO eventDTO = prepareKeycloakAdminEventDTO("CREATE", "USER", sampleKeycloakId);
@@ -53,6 +56,7 @@ public class KeycloakUserFacadeImplIntegrationTest {
 		assertEquals(TEST_POSTAL_CODE, byKeycloakId.getPostalCode());
 		assertEquals(TEST_DATE, byKeycloakId.getDayOfBirth());
 		assertEquals(sampleKeycloakId, byKeycloakId.getKeycloakId());
+		assertEquals(ApplicationConstants.ROLE_EMPLOYEE, byKeycloakId.getRole().getName());
 	}
 
 	@Test
@@ -88,6 +92,7 @@ public class KeycloakUserFacadeImplIntegrationTest {
 		attributes.put("dayOfBirth", Collections.singletonList("1990-01-01"));
 		JSONObject representationJson = new JSONObject(map);
 		representationJson.put("attributes", new JSONObject(attributes));
+		representationJson.put("groups", new JSONArray(List.of("/" + ApplicationConstants.ROLE_EMPLOYEE)));
 
 		KeycloakAdminEventDTO keycloakAdminEventDTO = new KeycloakAdminEventDTO();
 		keycloakAdminEventDTO.setOperationType(operationType);

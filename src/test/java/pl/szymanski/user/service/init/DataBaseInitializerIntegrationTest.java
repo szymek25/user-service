@@ -3,16 +3,15 @@ package pl.szymanski.user.service.init;
 import io.swagger.client.model.GroupRepresentation;
 import io.swagger.client.model.UserRepresentation;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
+import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.dao.InitStateDao;
 import pl.szymanski.user.service.dao.UserDao;
 import pl.szymanski.user.service.keycloak.api.KeycloakGroupService;
@@ -25,11 +24,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.matches;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(properties = {"user-service.initial-load.enabled=true"})
 @ExtendWith(OutputCaptureExtension.class)
@@ -95,6 +97,7 @@ public class DataBaseInitializerIntegrationTest {
 		assertEquals(user1.getEmail(), user1.getEmail());
 		Role roleOfUser1 = user1.getRole();
 		assertEquals(GROUP_1_ID, roleOfUser1.getId());
+		assertEquals("testDescription", roleOfUser1.getDescription());
 	}
 
 
@@ -134,6 +137,9 @@ public class DataBaseInitializerIntegrationTest {
 		group2.setName("group2");
 		groups.add(group1);
 		groups.add(group2);
+		Map<String, List<String>> attributes = new HashMap<>();
+		attributes.put(ApplicationConstants.KeyCloak.DESCRIPTION, Arrays.asList("testDescription"));
+		group1.setAttributes(attributes);
 		return groups;
 	}
 

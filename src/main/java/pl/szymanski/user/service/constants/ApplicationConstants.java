@@ -3,6 +3,8 @@ package pl.szymanski.user.service.constants;
 public class ApplicationConstants {
 
 	public static final String USER_ROLE_NAME = "ROLE_USER";
+	public static final String ROLE_EMPLOYEE = "ROLE_EMPLOYEE";
+
 
 	public class KeyCloak {
 		public static final String EMAIL = "email";
@@ -14,5 +16,10 @@ public class ApplicationConstants {
 		public static final String TOWN = "town";
 		public static final String POSTAL_CODE = "postalCode";
 		public static final String UUID = "id";
+		public static final String RESOURCE_TYPE_USER = "USER";
+		public static final String RESOURCE_TYPE_GROUP_MEMBERSHIP = "GROUP_MEMBERSHIP";
+		public static final String EVENT_TYPE_CREATE = "CREATE";
+		public static final String EVENT_TYPE_UPDATE = "UPDATE";
+		public static final String EVENT_TYPE_DELETE = "DELETE";
 	}
 }

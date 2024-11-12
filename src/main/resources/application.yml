@@ -40,3 +40,7 @@ keycloak:
 user-service:
   initial-load:
     enabled: true
+
+kafka:
+  bootstrapAddress: ${KAFKA_BOOTSTRAP_SERVERS:http://localhost:9092}
+  groupId: user-service

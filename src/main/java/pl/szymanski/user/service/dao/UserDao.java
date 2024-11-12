@@ -16,4 +16,8 @@ public interface UserDao extends CrudRepository<User, String> {
 
 	Page<User> findByRole(Pageable pageable, Role role);
 
+	User findByKeycloakId(String id);
+
+	void deleteByKeycloakId(String keycloakId);
+
 }

@@ -1,9 +1,9 @@
 DELETE FROM "user";
 DELETE FROM "role";
-INSERT INTO "role" ("id", "name") VALUES
-('13fbb108-1b6e-46f5-9e0d-d78f4bca1efc', 'ROLE_EMPLOYEE'),
-('f376a0e2-d26c-4c66-beb9-e5d5d63cd687', 'ROLE_USER'),
-('ca704dd5-067d-4847-a9b2-06c91c4b8744', 'ROLE_MANAGER');
+INSERT INTO "role" ("id", "name", "description") VALUES
+('13fbb108-1b6e-46f5-9e0d-d78f4bca1efc', 'ROLE_EMPLOYEE', 'Pracownik'),
+('f376a0e2-d26c-4c66-beb9-e5d5d63cd687', 'ROLE_USER', 'Użytkownik'),
+('ca704dd5-067d-4847-a9b2-06c91c4b8744', 'ROLE_MANAGER', 'Menadżer');
 
 INSERT INTO "user" ( "address_line1", "day_of_birth", "email", "last_name", "name", "phone", "postal_code", "town", "role_id", "keycloak_id") VALUES
 ('Biblioteczna', '1996-01-19', 'admin@biblioteka.com', 'admin', 'admin', '512155211', '41-800', 'Zabrze', '13fbb108-1b6e-46f5-9e0d-d78f4bca1efc', 'aa183f01-9487-437e-9d40-6665286fd641'),

@@ -73,6 +73,10 @@ public class UserControllerIntegrationTest {
 				.andExpect(jsonPath("page.size").value(50))
 				.andExpect(jsonPath("content").hasJsonPath())
 				.andExpect(jsonPath("content").isArray())
+				.andExpect(jsonPath("content[0].email").value("admin@biblioteka.com"))
+				.andExpect(jsonPath("content[0].role.id").value("13fbb108-1b6e-46f5-9e0d-d78f4bca1efc"))
+				.andExpect(jsonPath("content[0].role.name").value("ROLE_EMPLOYEE"))
+				.andExpect(jsonPath("content[0].role.description").value("Pracownik"))
 				.andReturn();
 
 	}

@@ -29,8 +29,7 @@ public class UserDTO {
 
 	private String postalCode;
 
-	private String roleId;
-
 	private String keycloakId;
 
+	private RoleDTO role;
 }

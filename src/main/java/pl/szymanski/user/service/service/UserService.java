@@ -25,4 +25,6 @@ public interface UserService {
 
 	Page<User> findEmployees(Pageable pageable);
 
+	Page<User> findAll(Pageable pageable);
+
 }

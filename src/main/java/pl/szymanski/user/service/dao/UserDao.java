@@ -20,4 +20,6 @@ public interface UserDao extends CrudRepository<User, String> {
 
 	void deleteByKeycloakId(String keycloakId);
 
+	Page<User> findAll(Pageable pageable);
+
 }

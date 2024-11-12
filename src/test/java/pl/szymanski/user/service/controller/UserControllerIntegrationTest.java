@@ -63,4 +63,18 @@ public class UserControllerIntegrationTest {
 
 	}
 
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void shouldReturnAllUsers() throws Exception {
+		MvcResult mvcResult = this.mockMvc.perform(get("/users"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("page.totalElements").value(9))
+				.andExpect(jsonPath("page.size").value(50))
+				.andExpect(jsonPath("content").hasJsonPath())
+				.andExpect(jsonPath("content").isArray())
+				.andReturn();
+
+	}
+
 }

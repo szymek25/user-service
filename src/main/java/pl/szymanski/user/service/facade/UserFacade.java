@@ -8,4 +8,7 @@ public interface UserFacade {
 	Page<UserDTO> findCustomers(int currentPage, int pageSize);
 
 	Page<UserDTO> findEmployees(int currentPage, int pageSize);
+
+	Page<UserDTO> findAllUsers(int currentPage, int pageSize);
+
 }

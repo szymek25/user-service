@@ -25,6 +25,15 @@ public class UserController {
 	@Autowired
 	public UserFacade userFacade;
 
+
+	@GetMapping
+	@Operation(summary = "Retrieves all users list")
+	@ApiResponse(responseCode = "200", description = "List of all users in system", content = @Content(schema = @Schema(implementation = UserDTO.class)))
+	public @ResponseBody ResponseEntity<Page<UserDTO>> users(@RequestParam(defaultValue = "0") int currentPage, @RequestParam(defaultValue = "50") int pageSize) {
+		Page<UserDTO> users = userFacade.findAllUsers(currentPage, pageSize);
+		return ResponseEntity.status(HttpStatus.OK).body(users);
+	}
+
 	@GetMapping("/customers")
 	@Operation(summary = "Retrieves library customers list")
 	@ApiResponse(responseCode = "200", description = "List of customers", content = @Content(schema = @Schema(implementation = UserDTO.class)))

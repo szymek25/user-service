@@ -32,4 +32,13 @@ public class UserController {
 		Page<UserDTO> customers = userFacade.findCustomers(currentPage, pageSize);
 		return ResponseEntity.status(HttpStatus.OK).body(customers);
 	}
+
+	@GetMapping("/employees")
+	@Operation(summary = "Retrieves library employees list")
+	@ApiResponse(responseCode = "200", description = "List of employees", content = @Content(schema = @Schema(implementation = UserDTO.class)))
+	public @ResponseBody ResponseEntity<Page<UserDTO>> employees(@RequestParam(defaultValue = "0") int currentPage, @RequestParam(defaultValue = "50") int pageSize) {
+		Page<UserDTO> employees = userFacade.findEmployees(currentPage, pageSize);
+		return ResponseEntity.status(HttpStatus.OK).body(employees);
+	}
+
 }

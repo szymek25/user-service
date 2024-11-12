@@ -6,4 +6,6 @@ import pl.szymanski.user.service.dto.UserDTO;
 public interface UserFacade {
 
 	Page<UserDTO> findCustomers(int currentPage, int pageSize);
+
+	Page<UserDTO> findEmployees(int currentPage, int pageSize);
 }

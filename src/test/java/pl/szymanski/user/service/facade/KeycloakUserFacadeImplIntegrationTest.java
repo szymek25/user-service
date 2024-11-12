@@ -56,7 +56,7 @@ public class KeycloakUserFacadeImplIntegrationTest {
 		assertEquals(TEST_POSTAL_CODE, byKeycloakId.getPostalCode());
 		assertEquals(TEST_DATE, byKeycloakId.getDayOfBirth());
 		assertEquals(sampleKeycloakId, byKeycloakId.getKeycloakId());
-		assertEquals(ApplicationConstants.ROLE_EMPLOYEE, byKeycloakId.getRole().getName());
+		assertEquals(ApplicationConstants.ROLE_EMPLOYEE_NAME, byKeycloakId.getRole().getName());
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class KeycloakUserFacadeImplIntegrationTest {
 		attributes.put("dayOfBirth", Collections.singletonList("1990-01-01"));
 		JSONObject representationJson = new JSONObject(map);
 		representationJson.put("attributes", new JSONObject(attributes));
-		representationJson.put("groups", new JSONArray(List.of("/" + ApplicationConstants.ROLE_EMPLOYEE)));
+		representationJson.put("groups", new JSONArray(List.of("/" + ApplicationConstants.ROLE_EMPLOYEE_NAME)));
 
 		KeycloakAdminEventDTO keycloakAdminEventDTO = new KeycloakAdminEventDTO();
 		keycloakAdminEventDTO.setOperationType(operationType);

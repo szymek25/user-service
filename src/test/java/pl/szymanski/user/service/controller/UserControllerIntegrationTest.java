@@ -45,4 +45,22 @@ public class UserControllerIntegrationTest {
 				.andReturn();
 
 	}
+
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void shouldReturnListOfLibraryEmployees() throws Exception {
+		MvcResult mvcResult = this.mockMvc.perform(get("/users/employees"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("page.totalElements").value(3))
+				.andExpect(jsonPath("page.size").value(50))
+				.andExpect(jsonPath("content").hasJsonPath())
+				.andExpect(jsonPath("content").isArray())
+				.andExpect(jsonPath("content[0].email").value("admin@biblioteka.com"))
+				.andExpect(jsonPath("content[1].email").value("jan@biblioteka.com"))
+				.andExpect(jsonPath("content[2].email").value("andrzej@biblioteka.com"))
+				.andReturn();
+
+	}
+
 }

@@ -64,4 +64,10 @@ public class UserServiceImpl implements UserService {
 		user.setRole(role);
 		userDao.save(user);
 	}
+
+	@Override
+	public Page<User> findEmployees(Pageable pageable) {
+		final Role userRole = roleService.getByName(ApplicationConstants.ROLE_EMPLOYEE_NAME);
+		return userDao.findByRole(pageable, userRole);
+	}
 }

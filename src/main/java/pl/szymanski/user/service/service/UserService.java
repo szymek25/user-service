@@ -22,4 +22,7 @@ public interface UserService {
 	void delete(String keycloakId);
 
 	void assignRole(User user, Role role);
+
+	Page<User> findEmployees(Pageable pageable);
+
 }

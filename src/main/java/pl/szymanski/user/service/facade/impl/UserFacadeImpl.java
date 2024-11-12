@@ -26,4 +26,11 @@ public class UserFacadeImpl implements UserFacade {
 		Page<User> customers = userService.findCustomers(pageable);
 		return customers.map(userUserDTOMapper::mapToUserDTO);
 	}
+
+	@Override
+	public Page<UserDTO> findEmployees(int currentPage, int pageSize) {
+		final Pageable pageable = PageRequest.of(currentPage, pageSize);
+		Page<User> employees = userService.findEmployees(pageable);
+		return employees.map(userUserDTOMapper::mapToUserDTO);
+	}
 }

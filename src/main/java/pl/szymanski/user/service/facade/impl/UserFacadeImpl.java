@@ -40,4 +40,10 @@ public class UserFacadeImpl implements UserFacade {
 		Page<User> users = userService.findAll(pageable);
 		return users.map(userUserDTOMapper::mapToUserDTO);
 	}
+
+	@Override
+	public UserDTO findUserById(String id) {
+		final User user = userService.findByKeycloakId(id);
+		return userUserDTOMapper.mapToUserDTO(user);
+	}
 }

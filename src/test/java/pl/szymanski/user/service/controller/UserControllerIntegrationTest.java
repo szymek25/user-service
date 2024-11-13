@@ -78,7 +78,25 @@ public class UserControllerIntegrationTest {
 				.andExpect(jsonPath("content[0].role.name").value("ROLE_EMPLOYEE"))
 				.andExpect(jsonPath("content[0].role.description").value("Pracownik"))
 				.andReturn();
-
 	}
 
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void shouldReturnUserById() throws Exception {
+	final String id = "aa183f01-9487-437e-9d40-6665286fd641";
+		MvcResult mvcResult = this.mockMvc.perform(get("/users/" + id))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("keycloakId").value(id))
+				.andExpect(jsonPath("email").value("admin@biblioteka.com"))
+				.andReturn();
+	}
+
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void shouldReturn404WhenUserNotFound() throws Exception {
+		final String id = "ssss-aaaa";
+		this.mockMvc.perform(get("/users/" + id))
+				.andExpect(status().isNotFound());
+	}
 }

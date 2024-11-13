@@ -11,4 +11,6 @@ public interface UserFacade {
 
 	Page<UserDTO> findAllUsers(int currentPage, int pageSize);
 
+	UserDTO findUserById(String id);
+
 }

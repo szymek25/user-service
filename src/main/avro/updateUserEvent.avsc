@@ -1,0 +1,80 @@
+{
+  "type": "record",
+  "name": "UpdateUserEvent",
+  "namespace": "pl.szymanski.springfrontend.avro",
+  "doc": "Library AVRO Schema :: UserUpdateEvent",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User keycloak ID"
+    },
+    {
+      "name": "email",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User email"
+    },
+    {
+      "name": "name",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User name"
+    },
+    {
+      "name": "lastName",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User last name"
+    },
+    {
+      "name": "dayOfBirth",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User day of birth"
+    },
+    {
+      "name": "phone",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User phone"
+    },
+    {
+      "name": "addressLine1",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User address line"
+    },
+    {
+      "name": "town",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User town"
+    },
+    {
+      "name": "postalCode",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User postal code"
+    }
+  ]
+}

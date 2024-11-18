@@ -44,3 +44,4 @@ user-service:
 kafka:
   bootstrapAddress: ${KAFKA_BOOTSTRAP_SERVERS:http://localhost:9092}
   groupId: user-service
+  schemaRegistryUrl: ${SCHEMA_REGISTRY_URL:''}

@@ -27,4 +27,6 @@ public interface UserService {
 
 	Page<User> findAll(Pageable pageable);
 
+	User update(User user, String keycloakId);
+
 }

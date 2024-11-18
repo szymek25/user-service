@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.dao.UserDao;
+import pl.szymanski.user.service.exception.UserNotFoundException;
 import pl.szymanski.user.service.model.Role;
 import pl.szymanski.user.service.model.User;
 import pl.szymanski.user.service.service.RoleService;
@@ -75,4 +76,28 @@ public class UserServiceImpl implements UserService {
 	public Page<User> findAll(Pageable pageable) {
 		return userDao.findAll(pageable);
 	}
+
+	@Override
+	public User update(final User user, final String keycloakId) {
+		User existingUser = findByKeycloakId(keycloakId);
+		if (existingUser == null) {
+			throw new UserNotFoundException("User with keycloakId: " + keycloakId + " not found");
+		} else {
+			updateUser(existingUser, user);
+			userDao.save(existingUser);
+			return existingUser;
+		}
+	}
+
+	private void updateUser(final User existingUser, final User user) {
+		existingUser.setAddressLine1(user.getAddressLine1());
+		existingUser.setDayOfBirth(user.getDayOfBirth());
+		existingUser.setEmail(user.getEmail());
+		existingUser.setLastName(user.getLastName());
+		existingUser.setName(user.getName());
+		existingUser.setPhone(user.getPhone());
+		existingUser.setTown(user.getTown());
+		existingUser.setPostalCode(user.getPostalCode());
+	}
+
 }

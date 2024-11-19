@@ -1,6 +1,7 @@
 package pl.szymanski.user.service.keycloak.api;
 
 import io.swagger.client.ApiException;
+import io.swagger.client.api.UserApi;
 import io.swagger.client.api.UsersApi;
 import io.swagger.client.model.UserRepresentation;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
-
 public class KeycloakUserServiceImplTest {
 
 	@InjectMocks
@@ -30,6 +30,9 @@ public class KeycloakUserServiceImplTest {
 
 	@Mock
 	private UsersApi usersApi;
+
+	@Mock
+	private UserApi userApi;
 
 	@BeforeEach
 	public void setup() {

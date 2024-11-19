@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.model.User;
+import pl.szymanski.user.service.service.UserService;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,9 @@ public class UserMapperTest {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Autowired
+	private UserService userService;
 
 	@Test
 	@Sql(scripts = "/scripts/users.sql")
@@ -50,5 +54,19 @@ public class UserMapperTest {
 		assertEquals(ApplicationConstants.USER_ROLE_NAME, user.getRole().getName());
 	}
 
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void testUserRepresentationMapping() {
+		String id = "aa183f01-9487-437e-9d40-6665286fd641";
+		User user = userService.findByKeycloakId(id);
+		UserRepresentation userRepresentation = userMapper.mapToUserRepresentation(user);
+		assertEquals("admin", userRepresentation.getFirstName());
+		assertEquals("admin", userRepresentation.getLastName());
+		assertEquals(id, userRepresentation.getId());
+		assertEquals("admin@biblioteka.com", userRepresentation.getEmail());
+		assertEquals("admin@biblioteka.com", userRepresentation.getUsername());
+		assertEquals(Map.of(ApplicationConstants.KeyCloak.PHONE, List.of("512155211"), ApplicationConstants.KeyCloak.ADDRESS_LINE_1, List.of("Biblioteczna"), ApplicationConstants.KeyCloak.TOWN, List.of("Zabrze"), ApplicationConstants.KeyCloak.POSTAL_CODE, List.of("41-800"),ApplicationConstants.KeyCloak.BIRTHDATE, List.of("1996-01-19")), userRepresentation.getAttributes());
+		assertEquals(List.of("/" + ApplicationConstants.ROLE_EMPLOYEE_NAME), userRepresentation.getGroups());
+	}
 
 }

@@ -28,4 +28,11 @@ public abstract class UserMapper {
 
 	public abstract List<User> map(List<UserRepresentation> userRepresentation);
 
+	@Mapping(target = "firstName", source = "user.name")
+	@Mapping(target = "id", source = "user.keycloakId")
+	@Mapping(target = "username", source = "user.email")
+	@Mapping(target = "attributes", expression = "java(helper.mapAttributes(user))")
+	@Mapping(target = "groups", expression = "java(helper.mapRoles(user))")
+	public abstract UserRepresentation mapToUserRepresentation(User user);
+
 }

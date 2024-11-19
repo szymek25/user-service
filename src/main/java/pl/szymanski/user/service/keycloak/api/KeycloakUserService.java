@@ -9,4 +9,6 @@ public interface KeycloakUserService {
 	int getTotalNumberOfUsers();
 
 	List<UserRepresentation> getUsers();
+
+	boolean updateUser(UserRepresentation userRepresentation);
 }

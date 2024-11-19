@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.mapper.helper.UserMapperHelper;
 import pl.szymanski.user.service.model.Role;
+import pl.szymanski.user.service.model.User;
 import pl.szymanski.user.service.service.RoleService;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,5 +57,24 @@ public class UserMapperHelperImpl implements UserMapperHelper {
 			return roleService.getByName(name);
 		}
 		return null;
+	}
+
+	@Override
+	public Map<String, List<String>> mapAttributes(final User user) {
+		final Map<String, List<String>> attributes = new HashMap<>();
+		attributes.put(ApplicationConstants.KeyCloak.PHONE, List.of(user.getPhone()));
+		attributes.put(ApplicationConstants.KeyCloak.ADDRESS_LINE_1, List.of(user.getAddressLine1()));
+		attributes.put(ApplicationConstants.KeyCloak.TOWN, List.of(user.getTown()));
+		attributes.put(ApplicationConstants.KeyCloak.POSTAL_CODE, List.of(user.getPostalCode()));
+		attributes.put(ApplicationConstants.KeyCloak.BIRTHDATE, List.of(user.getDayOfBirth().toString()));
+		return attributes;
+	}
+
+	@Override
+	public List<String> mapRoles(final User user) {
+		if (user.getRole() != null) {
+			return List.of("/" + user.getRole().getName());
+		}
+		return List.of();
 	}
 }

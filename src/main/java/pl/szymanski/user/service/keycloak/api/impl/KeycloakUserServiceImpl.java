@@ -1,6 +1,7 @@
 package pl.szymanski.user.service.keycloak.api.impl;
 
 import io.swagger.client.ApiException;
+import io.swagger.client.api.UserApi;
 import io.swagger.client.api.UsersApi;
 import io.swagger.client.model.UserRepresentation;
 import lombok.NonNull;
@@ -21,6 +22,9 @@ public class KeycloakUserServiceImpl extends AbstractKeycloakService implements 
 
 	@NonNull
 	private UsersApi usersApi;
+
+	@NonNull
+	private UserApi userApi;
 
 	@Value("${keycloak.users.pageSize}")
 	private int pageSize;
@@ -48,6 +52,17 @@ public class KeycloakUserServiceImpl extends AbstractKeycloakService implements 
 				users.addAll(getUsers(i, i + pageSize));
 			}
 			return users;
+		}
+	}
+
+	@Override
+	public boolean updateUser(final UserRepresentation userRepresentation) {
+		try {
+			userApi.realmUsersIdPut(realm,userRepresentation.getId(), userRepresentation);
+			return true;
+		} catch (ApiException e) {
+			LOG.error("Error while posting user", e);
+			return false;
 		}
 	}
 

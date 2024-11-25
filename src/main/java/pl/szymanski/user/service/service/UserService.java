@@ -29,4 +29,6 @@ public interface UserService {
 
 	User update(User user, String keycloakId);
 
+	String getCurrentRoleOfUser(String keycloakId);
+
 }

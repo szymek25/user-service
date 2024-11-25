@@ -89,6 +89,15 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public String getCurrentRoleOfUser(String keycloakId) {
+		User user = findByKeycloakId(keycloakId);
+		if(user != null) {
+			return user.getRole().getId();
+		}
+		return "";
+	}
+
 	private void updateUser(final User existingUser, final User user) {
 		existingUser.setAddressLine1(user.getAddressLine1());
 		existingUser.setDayOfBirth(user.getDayOfBirth());
@@ -98,6 +107,7 @@ public class UserServiceImpl implements UserService {
 		existingUser.setPhone(user.getPhone());
 		existingUser.setTown(user.getTown());
 		existingUser.setPostalCode(user.getPostalCode());
+		existingUser.setRole(user.getRole());
 	}
 
 }

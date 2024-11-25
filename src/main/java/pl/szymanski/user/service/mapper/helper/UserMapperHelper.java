@@ -1,6 +1,7 @@
 package pl.szymanski.user.service.mapper.helper;
 
 import io.swagger.client.model.UserRepresentation;
+import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 import pl.szymanski.user.service.model.Role;
 import pl.szymanski.user.service.model.User;
 
@@ -19,4 +20,7 @@ public interface UserMapperHelper {
 	Map<String, List<String>> mapAttributes(User user);
 
 	List<String> mapRoles(User user);
+
+	Role mapRole(UpdateUserEvent event);
+
 }

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.mapper.helper.UserMapperHelper;
 import pl.szymanski.user.service.model.Role;
@@ -76,5 +77,10 @@ public class UserMapperHelperImpl implements UserMapperHelper {
 			return List.of("/" + user.getRole().getName());
 		}
 		return List.of();
+	}
+
+	@Override
+	public Role mapRole(UpdateUserEvent event) {
+		return roleService.getById(event.getRoleId());
 	}
 }

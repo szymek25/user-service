@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import pl.szymanski.user.service.keycloak.api.AbstractKeycloakService;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
+import pl.szymanski.user.service.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,9 @@ public class KeycloakUserServiceImpl extends AbstractKeycloakService implements 
 
 	@NonNull
 	private UserApi userApi;
+
+	@NonNull
+	private UserService userService;
 
 	@Value("${keycloak.users.pageSize}")
 	private int pageSize;
@@ -58,10 +62,25 @@ public class KeycloakUserServiceImpl extends AbstractKeycloakService implements 
 	@Override
 	public boolean updateUser(final UserRepresentation userRepresentation) {
 		try {
-			userApi.realmUsersIdPut(realm,userRepresentation.getId(), userRepresentation);
+			userApi.realmUsersIdPut(realm, userRepresentation.getId(), userRepresentation);
 			return true;
 		} catch (ApiException e) {
 			LOG.error("Error while posting user", e);
+			return false;
+		}
+	}
+
+	@Override
+	public boolean assignRole(String userId, String roleId) {
+		final String currentRoleOfUser = userService.getCurrentRoleOfUser(userId);
+		try {
+			if (!currentRoleOfUser.equals(roleId)) {
+				userApi.realmUsersIdGroupsGroupIdDelete(realm, userId, currentRoleOfUser);
+				userApi.realmUsersIdGroupsGroupIdPut(realm, userId, roleId);
+			}
+			return true;
+		} catch (ApiException e) {
+			LOG.error("Error while assigning role: {} for user: {}", roleId, userId, e);
 			return false;
 		}
 	}

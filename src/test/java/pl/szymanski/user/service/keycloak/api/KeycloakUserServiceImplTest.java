@@ -14,12 +14,14 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import pl.szymanski.user.service.keycloak.api.impl.KeycloakUserServiceImpl;
+import pl.szymanski.user.service.service.UserService;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +35,9 @@ public class KeycloakUserServiceImplTest {
 
 	@Mock
 	private UserApi userApi;
+
+	@Mock
+	private UserService userService;
 
 	@BeforeEach
 	public void setup() {
@@ -80,5 +85,27 @@ public class KeycloakUserServiceImplTest {
 		when(usersApi.realmUsersGet(any(), any(), any(), any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), any(), any(), any(), any())).thenThrow(new ApiException(500, "Internal Server Error"));
 		List<UserRepresentation> users = keycloakUserService.getUsers();
 		assertEquals(users, List.of());
+	}
+
+	@Test
+	public void shouldAssignRole() throws ApiException {
+		String userId = "userId";
+		String roleId = "1ff-fff";
+		String currentRoleofUser = "1ff-fff-eeee";
+		when(userService.getCurrentRoleOfUser(userId)).thenReturn(currentRoleofUser);
+		keycloakUserService.assignRole(userId, roleId);
+		Mockito.verify(userApi, Mockito.times(1)).realmUsersIdGroupsGroupIdDelete(any(), eq(userId), eq(currentRoleofUser));
+		Mockito.verify(userApi, Mockito.times(1)).realmUsersIdGroupsGroupIdPut(any(), eq(userId), eq(roleId));
+	}
+
+	@Test
+	public void shouldNotAssignRoleIfTheSameAlreadyDefined() throws ApiException {
+		String userId = "userId";
+		String roleId = "1ff-fff";
+		String currentRoleofUser = "1ff-fff";
+		when(userService.getCurrentRoleOfUser(userId)).thenReturn(currentRoleofUser);
+		keycloakUserService.assignRole(userId, roleId);
+		Mockito.verify(userApi, Mockito.times(0)).realmUsersIdGroupsGroupIdDelete(any(), any(), any());
+		Mockito.verify(userApi, Mockito.times(0)).realmUsersIdGroupsGroupIdPut(any(), any(), any());
 	}
 }

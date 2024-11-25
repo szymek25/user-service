@@ -75,6 +75,14 @@
         "avro.java.string": "String"
       },
       "doc": "User postal code"
+    },
+    {
+      "name": "roleId",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User role id"
     }
   ]
 }

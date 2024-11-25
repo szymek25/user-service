@@ -11,4 +11,6 @@ public interface KeycloakUserService {
 	List<UserRepresentation> getUsers();
 
 	boolean updateUser(UserRepresentation userRepresentation);
+
+	boolean assignRole(String userId, String roleId);
 }

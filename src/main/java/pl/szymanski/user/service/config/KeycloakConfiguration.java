@@ -14,6 +14,7 @@ import pl.szymanski.user.service.keycloak.api.impl.KeycloakGroupServiceImpl;
 import pl.szymanski.user.service.keycloak.api.impl.KeycloakUserServiceImpl;
 import pl.szymanski.user.service.oauth.AccessTokenForTechnicalCallsInterceptor;
 import pl.szymanski.user.service.oauth.AccessTokenFromCurrentRequestInterceptor;
+import pl.szymanski.user.service.service.UserService;
 
 @Configuration
 public class KeycloakConfiguration {
@@ -71,8 +72,8 @@ public class KeycloakConfiguration {
 	}
 
 	@Bean("keycloakUserServiceForTechnicalCalls")
-	public KeycloakUserService keycloakUserService(AccessTokenForTechnicalCallsInterceptor interceptor) {
-		return new KeycloakUserServiceImpl(usersApiForTechnicalCalls(interceptor), userApiForTechnicalCalls(interceptor));
+	public KeycloakUserService keycloakUserService(AccessTokenForTechnicalCallsInterceptor interceptor, UserService userService) {
+		return new KeycloakUserServiceImpl(usersApiForTechnicalCalls(interceptor), userApiForTechnicalCalls(interceptor), userService);
 	}
 
 	@Bean("keycloakGroupServiceForTechnicalCalls")

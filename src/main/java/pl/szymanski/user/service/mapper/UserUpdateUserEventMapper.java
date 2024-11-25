@@ -2,14 +2,19 @@ package pl.szymanski.user.service.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
+import pl.szymanski.user.service.mapper.helper.UserMapperHelper;
 import pl.szymanski.user.service.model.User;
 
 @Mapper(componentModel = "spring")
-public interface UserUpdateUserEventMapper {
+public abstract class UserUpdateUserEventMapper {
+
+	@Autowired
+	protected UserMapperHelper helper;
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "keycloakId", source = "id")
-	@Mapping(target = "role", ignore = true)
+	@Mapping(target = "role", expression = "java(helper.mapRole(event))")
 	@Mapping(target = "dayOfBirth", expression = "java(java.sql.Date.valueOf(event.getDayOfBirth()))")
-	User map(UpdateUserEvent event);
+	public abstract User map(UpdateUserEvent event);
 }

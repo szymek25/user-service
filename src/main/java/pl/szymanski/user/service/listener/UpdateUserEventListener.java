@@ -9,7 +9,9 @@ import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
 import pl.szymanski.user.service.mapper.UserMapper;
 import pl.szymanski.user.service.mapper.UserUpdateUserEventMapper;
+import pl.szymanski.user.service.model.Role;
 import pl.szymanski.user.service.model.User;
+import pl.szymanski.user.service.service.RoleService;
 import pl.szymanski.user.service.service.UserService;
 
 import javax.annotation.Resource;
@@ -28,16 +30,26 @@ public class UpdateUserEventListener {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Autowired
+	private RoleService roleService;
 	private static final Logger log = LoggerFactory.getLogger(UpdateUserEventListener.class);
 
 	@KafkaListener(topics = "user-updates", groupId = "user-service", containerFactory = "userUpdatesContainerFactor")
 	public void handleUserUpdate(UpdateUserEvent event) {
 		log.debug("Received user update event: {}", event);
-		User userToBeUpdated = userUpdateUserEventMapper.map(event);
+		final User userToBeUpdated = userUpdateUserEventMapper.map(event);
 		boolean isUserUpdated = keycloakUserService.updateUser(userMapper.mapToUserRepresentation(userToBeUpdated));
+		User updatedUser = null;
+		if (isUserUpdated) {
+			updatedUser = userService.update(userToBeUpdated, event.getId());
+		}
 		boolean isRoleAssigned = keycloakUserService.assignRole(event.getId(), event.getRoleId());
-		if (isUserUpdated && isRoleAssigned) {
-			userService.update(userToBeUpdated, event.getId());
+		if (isRoleAssigned && updatedUser != null) {
+			userService.assignRole(updatedUser, roleService.getById(event.getRoleId()));
+		} else if (isRoleAssigned) {
+			userService.assignRole(userToBeUpdated.getKeycloakId(), roleService.getById(event.getRoleId()));
 		}
 	}
+
 }

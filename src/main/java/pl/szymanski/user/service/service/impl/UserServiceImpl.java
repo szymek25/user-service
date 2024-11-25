@@ -67,6 +67,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public void assignRole(String keycloakUserId, Role role) {
+		User user = findByKeycloakId(keycloakUserId);
+		if (user != null) {
+			assignRole(user, role);
+		}
+	}
+
+	@Override
 	public Page<User> findEmployees(Pageable pageable) {
 		final Role userRole = roleService.getByName(ApplicationConstants.ROLE_EMPLOYEE_NAME);
 		return userDao.findByRole(pageable, userRole);
@@ -107,7 +115,6 @@ public class UserServiceImpl implements UserService {
 		existingUser.setPhone(user.getPhone());
 		existingUser.setTown(user.getTown());
 		existingUser.setPostalCode(user.getPostalCode());
-		existingUser.setRole(user.getRole());
 	}
 
 }

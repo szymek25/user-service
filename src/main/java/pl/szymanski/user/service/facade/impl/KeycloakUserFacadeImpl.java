@@ -31,8 +31,8 @@ public class KeycloakUserFacadeImpl implements KeycloakUserFacade {
 	public void processUserUpdate(final KeycloakAdminEventDTO event) {
 		validateEvent(event, ApplicationConstants.KeyCloak.RESOURCE_TYPE_USER);
 
-		final User user = mapUserToObject(event);
 		if (checkIfEventTypeIsUpdateOrCreate(event)) {
+			final User user = mapUserToObject(event);
 			final User existingUser = userService.findByKeycloakId(user.getKeycloakId());
 			if (existingUser == null) {
 				userService.save(user);
@@ -41,7 +41,8 @@ public class KeycloakUserFacadeImpl implements KeycloakUserFacade {
 				userService.save(existingUser);
 			}
 		} else if (checkIfEventTypeIsDelete(event)) {
-			userService.delete(user.getKeycloakId());
+			String keycloakId = getKeycloakUserIdFromEvent(event);
+			userService.delete(keycloakId);
 		}
 
 

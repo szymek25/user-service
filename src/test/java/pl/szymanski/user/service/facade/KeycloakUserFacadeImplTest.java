@@ -89,7 +89,6 @@ public class KeycloakUserFacadeImplTest {
 	@Test
 	public void shouldRemoveUserWhenOperationTypeIsDelete() {
 		KeycloakAdminEventDTO eventDTO = prepareKeycloakAdminEventDTO("DELETE", "USER", SAMPLE_ID);
-		when(userMapper.map(any(UserRepresentation.class))).thenReturn(STUB_USER_FROM_UPDATE_EVENT);
 
 		keycloakUserFacadeImpl.processUserUpdate(eventDTO);
 

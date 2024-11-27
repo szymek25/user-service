@@ -13,15 +13,9 @@ public class RemoveUserEventListener {
 	@Autowired
 	private KeycloakUserService keycloakUserService;
 
-	@Autowired
-	private UserService userService;
-
 	@KafkaListener(topics = "user-removes", groupId = "user-service", containerFactory = "userRemovesContainerFactor")
 	public void handleUserDeletion(RemoveUserEvent event) {
 		String id = event.getId();
-		boolean isDeleted = keycloakUserService.deleteUser(id);
-		if (isDeleted) {
-			userService.delete(id);
-		}
+		keycloakUserService.deleteUser(id);
 	}
 }

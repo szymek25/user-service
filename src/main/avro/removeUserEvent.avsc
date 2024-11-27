@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "RemoveUserEvent",
+  "namespace": "pl.szymanski.springfrontend.avro",
+  "doc": "Library AVRO Schema :: RemoveUpdateEvent",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      "doc": "User keycloak ID"
+    }
+  ]
+}

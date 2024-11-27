@@ -1,5 +1,6 @@
 package pl.szymanski.user.service.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,6 +57,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(String keycloakId) {
 		userDao.deleteByKeycloakId(keycloakId);
 	}

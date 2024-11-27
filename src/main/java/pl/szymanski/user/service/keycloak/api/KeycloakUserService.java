@@ -13,4 +13,6 @@ public interface KeycloakUserService {
 	boolean updateUser(UserRepresentation userRepresentation);
 
 	boolean assignRole(String userId, String roleId);
+
+	boolean deleteUser(String userId);
 }

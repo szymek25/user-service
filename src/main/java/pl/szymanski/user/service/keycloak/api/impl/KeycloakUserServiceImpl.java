@@ -85,6 +85,17 @@ public class KeycloakUserServiceImpl extends AbstractKeycloakService implements 
 		}
 	}
 
+	@Override
+	public boolean deleteUser(String userId) {
+		try {
+			userApi.realmUsersIdDelete(realm, userId);
+			return true;
+		} catch (ApiException e) {
+			LOG.error("Error while deleting user: {}", userId, e);
+			return false;
+		}
+	}
+
 	private List<UserRepresentation> getUsers(int first, int max) {
 		try {
 			return usersApi.realmUsersGet(realm, null, null, null, null, null, null, null, null, first, max, null, null, null, null);

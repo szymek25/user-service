@@ -11,6 +11,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import pl.szymanski.springfrontend.avro.RemoveUserEvent;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 
 import java.util.HashMap;
@@ -57,7 +58,25 @@ public class KafkaConsumerConfig {
 		return factory;
 	}
 
-	private ConsumerFactory<String, UpdateUserEvent> getAvroConsumerConfig() {
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, UpdateUserEvent>
+	userUpdatesContainerFactor() {
+		ConcurrentKafkaListenerContainerFactory<String, UpdateUserEvent> factory =
+				new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(getAvroOptions()));
+		return factory;
+	}
+
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, RemoveUserEvent>
+	userRemovesContainerFactor() {
+		ConcurrentKafkaListenerContainerFactory<String, RemoveUserEvent> factory =
+				new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(getAvroOptions()));
+		return factory;
+	}
+
+	private Map<String, Object> getAvroOptions() {
 		final Map<String, Object> properties = new HashMap<>();
 		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
 		properties.put(ConsumerConfig.RECONNECT_BACKOFF_MS_CONFIG, "5000");
@@ -66,17 +85,7 @@ public class KafkaConsumerConfig {
 		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
 		properties.put(SCHEMA_REGISTRY_URL_KEY, schemaRegistryUrlKey);
 		properties.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, "true");
-
-		return new DefaultKafkaConsumerFactory<>(properties);
-	}
-
-	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, UpdateUserEvent>
-	userUpdatesContainerFactor() {
-		ConcurrentKafkaListenerContainerFactory<String, UpdateUserEvent> factory =
-				new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(getAvroConsumerConfig());
-		return factory;
+		return properties;
 	}
 }
 

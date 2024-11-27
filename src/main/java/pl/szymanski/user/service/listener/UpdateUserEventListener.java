@@ -39,17 +39,8 @@ public class UpdateUserEventListener {
 	public void handleUserUpdate(UpdateUserEvent event) {
 		log.debug("Received user update event: {}", event);
 		final User userToBeUpdated = userUpdateUserEventMapper.map(event);
-		boolean isUserUpdated = keycloakUserService.updateUser(userMapper.mapToUserRepresentation(userToBeUpdated));
-		User updatedUser = null;
-		if (isUserUpdated) {
-			updatedUser = userService.update(userToBeUpdated, event.getId());
-		}
-		boolean isRoleAssigned = keycloakUserService.assignRole(event.getId(), event.getRoleId());
-		if (isRoleAssigned && updatedUser != null) {
-			userService.assignRole(updatedUser, roleService.getById(event.getRoleId()));
-		} else if (isRoleAssigned) {
-			userService.assignRole(userToBeUpdated.getKeycloakId(), roleService.getById(event.getRoleId()));
-		}
+		keycloakUserService.updateUser(userMapper.mapToUserRepresentation(userToBeUpdated));
+		keycloakUserService.assignRole(event.getId(), event.getRoleId());
 	}
 
 }

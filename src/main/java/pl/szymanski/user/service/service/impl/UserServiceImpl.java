@@ -68,13 +68,6 @@ public class UserServiceImpl implements UserService {
 		userDao.save(user);
 	}
 
-	@Override
-	public void assignRole(String keycloakUserId, Role role) {
-		User user = findByKeycloakId(keycloakUserId);
-		if (user != null) {
-			assignRole(user, role);
-		}
-	}
 
 	@Override
 	public Page<User> findEmployees(Pageable pageable) {

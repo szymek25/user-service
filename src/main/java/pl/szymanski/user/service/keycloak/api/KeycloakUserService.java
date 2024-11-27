@@ -10,9 +10,9 @@ public interface KeycloakUserService {
 
 	List<UserRepresentation> getUsers();
 
-	boolean updateUser(UserRepresentation userRepresentation);
+	void updateUser(UserRepresentation userRepresentation);
 
-	boolean assignRole(String userId, String roleId);
+	void assignRole(String userId, String roleId);
 
-	boolean deleteUser(String userId);
+	void deleteUser(String userId);
 }

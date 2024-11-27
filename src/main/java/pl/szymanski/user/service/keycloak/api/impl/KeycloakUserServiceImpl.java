@@ -60,39 +60,33 @@ public class KeycloakUserServiceImpl extends AbstractKeycloakService implements 
 	}
 
 	@Override
-	public boolean updateUser(final UserRepresentation userRepresentation) {
+	public void updateUser(final UserRepresentation userRepresentation) {
 		try {
 			userApi.realmUsersIdPut(realm, userRepresentation.getId(), userRepresentation);
-			return true;
 		} catch (ApiException e) {
 			LOG.error("Error while posting user", e);
-			return false;
 		}
 	}
 
 	@Override
-	public boolean assignRole(String userId, String roleId) {
+	public void assignRole(String userId, String roleId) {
 		final String currentRoleOfUser = userService.getCurrentRoleOfUser(userId);
 		try {
 			if (!currentRoleOfUser.equals(roleId)) {
 				userApi.realmUsersIdGroupsGroupIdDelete(realm, userId, currentRoleOfUser);
 				userApi.realmUsersIdGroupsGroupIdPut(realm, userId, roleId);
 			}
-			return true;
 		} catch (ApiException e) {
 			LOG.error("Error while assigning role: {} for user: {}", roleId, userId, e);
-			return false;
 		}
 	}
 
 	@Override
-	public boolean deleteUser(String userId) {
+	public void deleteUser(String userId) {
 		try {
 			userApi.realmUsersIdDelete(realm, userId);
-			return true;
 		} catch (ApiException e) {
 			LOG.error("Error while deleting user: {}", userId, e);
-			return false;
 		}
 	}
 

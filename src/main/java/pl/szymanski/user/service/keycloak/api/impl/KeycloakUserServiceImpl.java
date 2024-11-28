@@ -3,6 +3,7 @@ package pl.szymanski.user.service.keycloak.api.impl;
 import io.swagger.client.ApiException;
 import io.swagger.client.api.UserApi;
 import io.swagger.client.api.UsersApi;
+import io.swagger.client.model.CredentialRepresentation;
 import io.swagger.client.model.UserRepresentation;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -87,6 +88,18 @@ public class KeycloakUserServiceImpl extends AbstractKeycloakService implements 
 			userApi.realmUsersIdDelete(realm, userId);
 		} catch (ApiException e) {
 			LOG.error("Error while deleting user: {}", userId, e);
+		}
+	}
+
+	@Override
+	public void updatePassword(String userId, String password) {
+		final CredentialRepresentation credential = new CredentialRepresentation();
+		credential.setType("password");
+		credential.setValue(password);
+		try {
+			userApi.realmUsersIdResetPasswordPut(realm, userId, credential);
+		} catch (ApiException e) {
+			LOG.error("Error while updating password for user: {}", userId, e);
 		}
 	}
 

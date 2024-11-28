@@ -15,4 +15,6 @@ public interface KeycloakUserService {
 	void assignRole(String userId, String roleId);
 
 	void deleteUser(String userId);
+
+	void updatePassword(String userId, String password);
 }

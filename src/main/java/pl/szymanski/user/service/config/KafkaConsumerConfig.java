@@ -12,6 +12,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import pl.szymanski.springfrontend.avro.RemoveUserEvent;
+import pl.szymanski.springfrontend.avro.UpdatePasswordEvent;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 
 import java.util.HashMap;
@@ -71,6 +72,15 @@ public class KafkaConsumerConfig {
 	public ConcurrentKafkaListenerContainerFactory<String, RemoveUserEvent>
 	userRemovesContainerFactor() {
 		ConcurrentKafkaListenerContainerFactory<String, RemoveUserEvent> factory =
+				new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(getAvroOptions()));
+		return factory;
+	}
+
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, UpdatePasswordEvent>
+	updatePasswordContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, UpdatePasswordEvent> factory =
 				new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(getAvroOptions()));
 		return factory;

@@ -31,4 +31,7 @@ public interface UserService {
 
 	String getCurrentRoleOfUser(String keycloakId);
 
+	User findByKeycloakEmail(String email);
+
+
 }

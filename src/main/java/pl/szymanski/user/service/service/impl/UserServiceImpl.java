@@ -101,6 +101,11 @@ public class UserServiceImpl implements UserService {
 		return "";
 	}
 
+	@Override
+	public User findByKeycloakEmail(String email) {
+		return userDao.findByEmail(email);
+	}
+
 	private void updateUser(final User existingUser, final User user) {
 		existingUser.setAddressLine1(user.getAddressLine1());
 		existingUser.setDayOfBirth(user.getDayOfBirth());

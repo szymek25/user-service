@@ -13,4 +13,6 @@ public interface UserFacade {
 
 	UserDTO findUserById(String id);
 
+	UserDTO findUserByEmail(String email);
+
 }

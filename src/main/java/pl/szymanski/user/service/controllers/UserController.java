@@ -62,4 +62,16 @@ public class UserController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(user);
 	}
+
+	@GetMapping("/getByEmail")
+	@Operation(summary = "Get user by email")
+	@ApiResponse(responseCode = "200", description = "Get user by email", content = @Content(schema = @Schema(implementation = UserDTO.class)))
+	@ApiResponse(responseCode = "404", description = "User not found")
+	public @ResponseBody ResponseEntity<UserDTO> getUserByEmail(@RequestParam("email") String id) {
+		UserDTO user = userFacade.findUserByEmail(id);
+		if(user == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(user);
+	}
 }

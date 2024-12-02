@@ -99,4 +99,23 @@ public class UserControllerIntegrationTest {
 		this.mockMvc.perform(get("/users/" + id))
 				.andExpect(status().isNotFound());
 	}
+
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void shouldReturnUserByEmail() throws Exception {
+		final String email = "admin@biblioteka.com";
+		MvcResult mvcResult = this.mockMvc.perform(get("/users/getByEmail").param("email", email))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("email").value("admin@biblioteka.com"))
+				.andReturn();
+	}
+
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void shouldReturn404WhenUserNotFoundByEmail() throws Exception {
+		final String email = "ssss-aaaa";
+		this.mockMvc.perform(get("/users/getByEmail").param("email", email))
+				.andExpect(status().isNotFound());
+	}
 }

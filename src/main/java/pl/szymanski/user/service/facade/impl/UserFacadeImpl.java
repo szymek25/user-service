@@ -46,4 +46,10 @@ public class UserFacadeImpl implements UserFacade {
 		final User user = userService.findByKeycloakId(id);
 		return userUserDTOMapper.mapToUserDTO(user);
 	}
+
+	@Override
+	public UserDTO findUserByEmail(String email) {
+		User user = userService.findByKeycloakEmail(email);
+		return userUserDTOMapper.mapToUserDTO(user);
+	}
 }

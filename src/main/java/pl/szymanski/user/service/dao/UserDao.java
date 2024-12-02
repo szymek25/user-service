@@ -22,4 +22,7 @@ public interface UserDao extends CrudRepository<User, String> {
 
 	Page<User> findAll(Pageable pageable);
 
+	User findByEmail(String email);
+
+
 }

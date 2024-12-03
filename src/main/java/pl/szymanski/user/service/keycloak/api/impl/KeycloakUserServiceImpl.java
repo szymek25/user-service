@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.keycloak.api.AbstractKeycloakService;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
 import pl.szymanski.user.service.service.UserService;
@@ -96,7 +97,7 @@ public class KeycloakUserServiceImpl extends AbstractKeycloakService implements 
 	@Override
 	public void updatePassword(String userId, String password) {
 		final CredentialRepresentation credential = new CredentialRepresentation();
-		credential.setType("password");
+		credential.setType(ApplicationConstants.KeyCloak.CREDENTIAL_TYPE_PASSWORD);
 		credential.setValue(password);
 		try {
 			userApi.realmUsersIdResetPasswordPut(realm, userId, credential);

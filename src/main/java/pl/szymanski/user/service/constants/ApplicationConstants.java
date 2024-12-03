@@ -22,5 +22,6 @@ public class ApplicationConstants {
 		public static final String EVENT_TYPE_CREATE = "CREATE";
 		public static final String EVENT_TYPE_UPDATE = "UPDATE";
 		public static final String EVENT_TYPE_DELETE = "DELETE";
+		public static final String CREDENTIAL_TYPE_PASSWORD = "password";
 	}
 }

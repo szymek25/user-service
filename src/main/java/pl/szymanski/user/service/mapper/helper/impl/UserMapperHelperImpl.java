@@ -1,5 +1,6 @@
 package pl.szymanski.user.service.mapper.helper.impl;
 
+import io.swagger.client.model.CredentialRepresentation;
 import io.swagger.client.model.UserRepresentation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -103,6 +104,14 @@ public class UserMapperHelperImpl implements UserMapperHelper {
 		attributes.put(ApplicationConstants.KeyCloak.POSTAL_CODE, List.of(user.getPostalCode()));
 		attributes.put(ApplicationConstants.KeyCloak.BIRTHDATE, List.of(user.getDayOfBirth()));
 		return attributes;
+	}
+
+	@Override
+	public List<CredentialRepresentation> mapCredentials(String password) {
+		final CredentialRepresentation credential = new CredentialRepresentation();
+		credential.setType(ApplicationConstants.KeyCloak.CREDENTIAL_TYPE_PASSWORD);
+		credential.setValue(password);
+		return List.of(credential);
 	}
 
 	private List<String> createGroupList(Role role) {

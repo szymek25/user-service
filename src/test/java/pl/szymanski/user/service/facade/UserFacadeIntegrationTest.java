@@ -1,6 +1,7 @@
 package pl.szymanski.user.service.facade;
 
 import io.swagger.client.ApiException;
+import io.swagger.client.model.CredentialRepresentation;
 import io.swagger.client.model.UserRepresentation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
+import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.dto.AddUserDTO;
 import pl.szymanski.user.service.exception.DuplicatedUserException;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
 import pl.szymanski.user.service.matcher.UserRepresentationMatcher;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,6 +45,7 @@ public class UserFacadeIntegrationTest {
 		addUserDTO.setPostalCode("1111");
 		addUserDTO.setTown("test Town");
 		addUserDTO.setDayOfBirth("1990-01-01");
+		addUserDTO.setPassword("examplePassword");
 
 		userFacade.addUser(addUserDTO);
 
@@ -59,6 +63,10 @@ public class UserFacadeIntegrationTest {
 		attributes.put("dayOfBirth", List.of("1990-01-01"));
 		userRepresentation.enabled(true);
 		userRepresentation.emailVerified(true);
+		final CredentialRepresentation credential = new CredentialRepresentation();
+		credential.setType(ApplicationConstants.KeyCloak.CREDENTIAL_TYPE_PASSWORD);
+		credential.setValue("examplePassword");
+		userRepresentation.setCredentials(Collections.singletonList(credential));
 
 		userRepresentation.setAttributes(attributes);
 		verify(keycloakUserService).createUser(argThat(new UserRepresentationMatcher(userRepresentation)));

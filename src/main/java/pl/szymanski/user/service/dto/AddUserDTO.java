@@ -29,4 +29,6 @@ public class AddUserDTO {
 	private String postalCode;
 
 	private String roleId;
+
+	private String password;
 }

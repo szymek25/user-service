@@ -18,5 +18,6 @@ public abstract class AddUserDtoUserRepresentationMapper {
 	@Mapping(target = "username", source = "addUserDto.email")
 	@Mapping(target = "enabled", constant = "true")
 	@Mapping(target = "emailVerified", constant = "true")
+	@Mapping(target = "credentials", expression = "java(helper.mapCredentials(addUserDto.getPassword()))")
 	public abstract UserRepresentation map(AddUserDTO addUserDto);
 }

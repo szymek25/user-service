@@ -23,7 +23,8 @@ public class UserRepresentationMatcher implements ArgumentMatcher<UserRepresenta
 				&& userRepresentation.getFirstName().equals(argument.getFirstName())
 				&& userRepresentation.getLastName().equals(argument.getLastName()) && userRepresentation.getEmail().equals(argument.getEmail())
 				&& userRepresentation.isEnabled().equals(argument.isEnabled()) && userRepresentation.isEmailVerified().equals(argument.isEmailVerified())
-				&& matchAttributes(argument) && matchGroups(argument);
+				&& matchAttributes(argument) && matchGroups(argument)
+				&& userRepresentation.getCredentials().equals(argument.getCredentials());
 	}
 
 	private boolean matchGroups(UserRepresentation argument) {

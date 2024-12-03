@@ -1,5 +1,6 @@
 package pl.szymanski.user.service.mapper.helper;
 
+import io.swagger.client.model.CredentialRepresentation;
 import io.swagger.client.model.UserRepresentation;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 import pl.szymanski.user.service.dto.AddUserDTO;
@@ -27,5 +28,7 @@ public interface UserMapperHelper {
 	List<String> mapGroups(String roleId);
 
 	Map<String, List<String>> mapAttributes(AddUserDTO user);
+
+	List<CredentialRepresentation> mapCredentials(String password);
 
 }

@@ -2,6 +2,7 @@ package pl.szymanski.user.service.mapper.helper;
 
 import io.swagger.client.model.UserRepresentation;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
+import pl.szymanski.user.service.dto.AddUserDTO;
 import pl.szymanski.user.service.model.Role;
 import pl.szymanski.user.service.model.User;
 
@@ -22,5 +23,9 @@ public interface UserMapperHelper {
 	List<String> mapRoles(User user);
 
 	Role mapRole(UpdateUserEvent event);
+
+	List<String> mapGroups(String roleId);
+
+	Map<String, List<String>> mapAttributes(AddUserDTO user);
 
 }

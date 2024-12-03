@@ -1,6 +1,7 @@
 package pl.szymanski.user.service.keycloak.api.impl;
 
 import io.swagger.client.ApiException;
+import io.swagger.client.ApiResponse;
 import io.swagger.client.api.UserApi;
 import io.swagger.client.api.UsersApi;
 import io.swagger.client.model.CredentialRepresentation;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import pl.szymanski.user.service.keycloak.api.AbstractKeycloakService;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
 import pl.szymanski.user.service.service.UserService;
@@ -101,6 +103,12 @@ public class KeycloakUserServiceImpl extends AbstractKeycloakService implements 
 		} catch (ApiException e) {
 			LOG.error("Error while updating password for user: {}", userId, e);
 		}
+	}
+
+	@Override
+	public boolean createUser(UserRepresentation userRepresentation) throws ApiException {
+		ApiResponse<Void> voidApiResponse = usersApi.realmUsersPostWithHttpInfo(realm, userRepresentation);
+		return HttpStatus.OK.value() == voidApiResponse.getStatusCode();
 	}
 
 	private List<UserRepresentation> getUsers(int first, int max) {

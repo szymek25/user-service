@@ -1,5 +1,6 @@
 package pl.szymanski.user.service.controllers;
 
+import io.swagger.client.ApiException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,11 +12,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import pl.szymanski.user.service.dto.AddUserDTO;
 import pl.szymanski.user.service.dto.UserDTO;
+import pl.szymanski.user.service.exception.DuplicatedUserException;
 import pl.szymanski.user.service.facade.UserFacade;
 
 @RestController
@@ -73,5 +78,21 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(user);
+	}
+
+	@PostMapping("/add")
+	@Operation(summary = "Add new user, operation typically should be involved by library employee")
+	@ApiResponse(responseCode = "201", description = "user created")
+	@ApiResponse(responseCode = "409", description = "User already exists")
+	@ApiResponse(responseCode = "503", description = "Problem with keycloak service")
+	public @ResponseBody ResponseEntity<String> addUser(@RequestBody AddUserDTO addUserDTO) {
+		try {
+			userFacade.addUser(addUserDTO);
+		} catch (DuplicatedUserException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+		} catch (ApiException e) {
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e.getResponseBody());
+		}
+		return ResponseEntity.status(HttpStatus.OK).body("OK");
 	}
 }

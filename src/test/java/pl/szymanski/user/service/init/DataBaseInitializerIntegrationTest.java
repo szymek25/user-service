@@ -50,7 +50,7 @@ public class DataBaseInitializerIntegrationTest {
 	@Autowired
 	private InitStateDao initStateDao;
 
-	@MockBean
+	@MockBean(name = "keycloakUserServiceForTechnicalCalls")
 	private KeycloakUserService keycloakUserService;
 
 	@MockBean

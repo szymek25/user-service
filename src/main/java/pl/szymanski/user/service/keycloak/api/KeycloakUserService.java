@@ -1,5 +1,6 @@
 package pl.szymanski.user.service.keycloak.api;
 
+import io.swagger.client.ApiException;
 import io.swagger.client.model.UserRepresentation;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface KeycloakUserService {
 	void deleteUser(String userId);
 
 	void updatePassword(String userId, String password);
+
+	boolean createUser(UserRepresentation userRepresentation) throws ApiException;
 }

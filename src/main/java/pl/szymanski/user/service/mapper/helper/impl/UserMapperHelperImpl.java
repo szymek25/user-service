@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 import pl.szymanski.user.service.constants.ApplicationConstants;
+import pl.szymanski.user.service.dto.AddUserDTO;
 import pl.szymanski.user.service.mapper.helper.UserMapperHelper;
 import pl.szymanski.user.service.model.Role;
 import pl.szymanski.user.service.model.User;
@@ -74,7 +75,7 @@ public class UserMapperHelperImpl implements UserMapperHelper {
 	@Override
 	public List<String> mapRoles(final User user) {
 		if (user.getRole() != null) {
-			return List.of("/" + user.getRole().getName());
+			return createGroupList(user.getRole());
 		}
 		return List.of();
 	}
@@ -82,5 +83,29 @@ public class UserMapperHelperImpl implements UserMapperHelper {
 	@Override
 	public Role mapRole(UpdateUserEvent event) {
 		return roleService.getById(event.getRoleId());
+	}
+
+	@Override
+	public List<String> mapGroups(String roleId) {
+		Role roleByName = roleService.getById(roleId);
+		if (roleByName != null) {
+			return createGroupList(roleByName);
+		}
+		return List.of();
+	}
+
+	@Override
+	public Map<String, List<String>> mapAttributes(AddUserDTO user) {
+		final Map<String, List<String>> attributes = new HashMap<>();
+		attributes.put(ApplicationConstants.KeyCloak.PHONE, List.of(user.getPhone()));
+		attributes.put(ApplicationConstants.KeyCloak.ADDRESS_LINE_1, List.of(user.getAddressLine1()));
+		attributes.put(ApplicationConstants.KeyCloak.TOWN, List.of(user.getTown()));
+		attributes.put(ApplicationConstants.KeyCloak.POSTAL_CODE, List.of(user.getPostalCode()));
+		attributes.put(ApplicationConstants.KeyCloak.BIRTHDATE, List.of(user.getDayOfBirth()));
+		return attributes;
+	}
+
+	private List<String> createGroupList(Role role) {
+		return List.of("/" + role.getName());
 	}
 }

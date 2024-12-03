@@ -86,4 +86,8 @@ public class KeycloakConfiguration {
 		return new GroupApi(apiClientForTechnicalCalls(interceptor));
 	}
 
+	@Bean("keycloakUserServiceForApiCalls")
+	public KeycloakUserService keycloakUserServiceForUsersCalls(AccessTokenForTechnicalCallsInterceptor interceptor, UserService userService) {
+		return new KeycloakUserServiceImpl(usersApi(), userApi(), userService);
+	}
 }

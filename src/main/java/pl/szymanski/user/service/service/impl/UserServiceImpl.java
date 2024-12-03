@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findByKeycloakEmail(String email) {
+	public User findByEmail(String email) {
 		return userDao.findByEmail(email);
 	}
 

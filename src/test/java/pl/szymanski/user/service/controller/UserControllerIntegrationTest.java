@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.dto.AddUserDTO;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
 
@@ -143,25 +144,60 @@ public class UserControllerIntegrationTest {
 	}
 
 	@Test
-	public void shouldReturn503InCaseOfIssuesInKeycloak() throws Exception {
-		final AddUserDTO dto = createAddUserDTO("");
+	public void shouldReturn503InCaseOfIssuesInKeycloakWhenCreatingUser() throws Exception {
+		final AddUserDTO dto = createAddUserDTO("test@test.com");
 
 		when(keycloakUserService.createUser(any())).thenThrow(new ApiException("Keycloak is down"));
 		this.mockMvc.perform(post("/users/add").contentType("application/json").content(objectMapper.writeValueAsString(dto)))
 				.andExpect(status().isServiceUnavailable());
 	}
 
+	@Test
+	public void shouldReturnEmptyValidationMessagesWhenCreatingUser() throws Exception {
+		final AddUserDTO dto = new AddUserDTO();
+		this.mockMvc.perform(post("/users/add").contentType("application/json").content(objectMapper.writeValueAsString(dto)))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.email").value(ApplicationConstants.ValidationMessages.EMAIL_EMPTY))
+				.andExpect(jsonPath("$.name").value(ApplicationConstants.ValidationMessages.NAME_EMPTY))
+				.andExpect(jsonPath("$.lastName").value(ApplicationConstants.ValidationMessages.LAST_NAME_EMPTY))
+				.andExpect(jsonPath("$.dayOfBirth").value(ApplicationConstants.ValidationMessages.DAY_OF_BIRTH_EMPTY))
+				.andExpect(jsonPath("$.phone").value(ApplicationConstants.ValidationMessages.PHONE_EMPTY))
+				.andExpect(jsonPath("$.addressLine1").value(ApplicationConstants.ValidationMessages.ADDRESS_LINE_1_EMPTY))
+				.andExpect(jsonPath("$.town").value(ApplicationConstants.ValidationMessages.TOWN_EMPTY))
+				.andExpect(jsonPath("$.postalCode").value(ApplicationConstants.ValidationMessages.POSTAL_CODE_EMPTY))
+				.andExpect(jsonPath("$.roleId").value(ApplicationConstants.ValidationMessages.ROLE_EMPTY))
+				.andExpect(jsonPath("$.password").value(ApplicationConstants.ValidationMessages.PASSWORD_EMPTY));
+	}
+
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void shouldReturnMessagesForInvalidValuesWhenCreatingUser() throws Exception {
+		final AddUserDTO dto = createAddUserDTO("invalid");
+		dto.setRoleId("2222");
+		dto.setPhone("ssss");
+		dto.setDayOfBirth("12-12-2002");
+
+		this.mockMvc.perform(post("/users/add").contentType("application/json").content(objectMapper.writeValueAsString(dto)))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.roleId").value(ApplicationConstants.ValidationMessages.INVALID_ROLE))
+				.andExpect(jsonPath("$.email").value(ApplicationConstants.ValidationMessages.EMAIL_INVALID))
+				.andExpect(jsonPath("$.phone").value(ApplicationConstants.ValidationMessages.PHONE_INVALID))
+				.andExpect(jsonPath("$.dayOfBirth").value(ApplicationConstants.ValidationMessages.DAY_OF_BIRTH_INVALID));
+
+	}
+
 	private static AddUserDTO createAddUserDTO(String email) {
 		final AddUserDTO dto = new AddUserDTO();
 		dto.setEmail(email);
-		dto.setTown("");
-		dto.setPostalCode("");
-		dto.setPhone("");
-		dto.setRoleId("");
-		dto.setDayOfBirth("");
-		dto.setAddressLine1("");
-		dto.setLastName("");
-		dto.setName("");
+		dto.setTown("test");
+		dto.setPostalCode("test");
+		dto.setPhone("1111");
+		dto.setRoleId("13fbb108-1b6e-46f5-9e0d-d78f4bca1efc");
+		dto.setDayOfBirth("1990-11-11");
+		dto.setAddressLine1("test");
+		dto.setLastName("test");
+		dto.setName("test");
+		dto.setPassword("test");
 
 		return dto;
 	}

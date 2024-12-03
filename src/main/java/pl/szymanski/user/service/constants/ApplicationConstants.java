@@ -24,4 +24,21 @@ public class ApplicationConstants {
 		public static final String EVENT_TYPE_DELETE = "DELETE";
 		public static final String CREDENTIAL_TYPE_PASSWORD = "password";
 	}
+
+	public class ValidationMessages {
+		public static final String EMAIL_EMPTY = "Email cannot be empty";
+		public static final String NAME_EMPTY = "Name cannot be empty";
+		public static final String LAST_NAME_EMPTY = "Last name cannot be empty";
+		public static final String DAY_OF_BIRTH_EMPTY = "Day of birth cannot be empty";
+		public static final String PHONE_EMPTY = "Phone cannot be empty";
+		public static final String PHONE_INVALID = "Phone number is invalid";
+		public static final String ADDRESS_LINE_1_EMPTY = "Address line 1 cannot be empty";
+		public static final String TOWN_EMPTY = "Town cannot be empty";
+		public static final String POSTAL_CODE_EMPTY = "Postal code cannot be empty";
+		public static final String INVALID_ROLE = "Invalid role";
+		public static final String PASSWORD_EMPTY = "Password cannot be empty";
+		public static final String ROLE_EMPTY = "Role cannot be empty";
+		public static final String EMAIL_INVALID = "Email is invalid";
+		public static final String DAY_OF_BIRTH_INVALID = "Day of birth is invalid";
+	}
 }

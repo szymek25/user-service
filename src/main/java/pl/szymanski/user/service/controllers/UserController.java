@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -85,7 +86,7 @@ public class UserController {
 	@ApiResponse(responseCode = "201", description = "user created")
 	@ApiResponse(responseCode = "409", description = "User already exists")
 	@ApiResponse(responseCode = "503", description = "Problem with keycloak service")
-	public @ResponseBody ResponseEntity<String> addUser(@RequestBody AddUserDTO addUserDTO) {
+	public @ResponseBody ResponseEntity<String> addUser(@Valid @RequestBody AddUserDTO addUserDTO) {
 		try {
 			userFacade.addUser(addUserDTO);
 		} catch (DuplicatedUserException e) {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.dto.AddUserDTO;
+import pl.szymanski.user.service.dto.RegisterUserDTO;
 import pl.szymanski.user.service.mapper.helper.UserMapperHelper;
 import pl.szymanski.user.service.model.Role;
 import pl.szymanski.user.service.model.User;
@@ -107,11 +108,31 @@ public class UserMapperHelperImpl implements UserMapperHelper {
 	}
 
 	@Override
+	public Map<String, List<String>> mapAttributes(RegisterUserDTO user) {
+		final Map<String, List<String>> attributes = new HashMap<>();
+		attributes.put(ApplicationConstants.KeyCloak.PHONE, List.of(user.getPhone()));
+		attributes.put(ApplicationConstants.KeyCloak.ADDRESS_LINE_1, List.of(user.getAddressLine1()));
+		attributes.put(ApplicationConstants.KeyCloak.TOWN, List.of(user.getTown()));
+		attributes.put(ApplicationConstants.KeyCloak.POSTAL_CODE, List.of(user.getPostalCode()));
+		attributes.put(ApplicationConstants.KeyCloak.BIRTHDATE, List.of(user.getDayOfBirth()));
+		return attributes;
+	}
+
+	@Override
 	public List<CredentialRepresentation> mapCredentials(String password) {
 		final CredentialRepresentation credential = new CredentialRepresentation();
 		credential.setType(ApplicationConstants.KeyCloak.CREDENTIAL_TYPE_PASSWORD);
 		credential.setValue(password);
 		return List.of(credential);
+	}
+
+	@Override
+	public List<String> mapUserRoleGroup() {
+		Role role = roleService.getByName(ApplicationConstants.USER_ROLE_NAME);
+		if (role != null) {
+			return createGroupList(role);
+		}
+		return List.of();
 	}
 
 	private List<String> createGroupList(Role role) {

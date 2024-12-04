@@ -8,6 +8,8 @@ import io.swagger.client.api.UsersApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pl.szymanski.user.service.facade.UserFacade;
+import pl.szymanski.user.service.facade.impl.UserFacadeImpl;
 import pl.szymanski.user.service.keycloak.api.KeycloakGroupService;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
 import pl.szymanski.user.service.keycloak.api.impl.KeycloakGroupServiceImpl;
@@ -72,7 +74,7 @@ public class KeycloakConfiguration {
 	}
 
 	@Bean("keycloakUserServiceForTechnicalCalls")
-	public KeycloakUserService keycloakUserService(AccessTokenForTechnicalCallsInterceptor interceptor, UserService userService) {
+	public KeycloakUserService keycloakUserServiceForTechnicalCalls(AccessTokenForTechnicalCallsInterceptor interceptor, UserService userService) {
 		return new KeycloakUserServiceImpl(usersApiForTechnicalCalls(interceptor), userApiForTechnicalCalls(interceptor), userService);
 	}
 
@@ -87,7 +89,17 @@ public class KeycloakConfiguration {
 	}
 
 	@Bean("keycloakUserServiceForApiCalls")
-	public KeycloakUserService keycloakUserServiceForUsersCalls(AccessTokenForTechnicalCallsInterceptor interceptor, UserService userService) {
+	public KeycloakUserService keycloakUserServiceForUsersCalls(UserService userService) {
 		return new KeycloakUserServiceImpl(usersApi(), userApi(), userService);
+	}
+
+	@Bean("userFacadeWithKeycloakUserCalls")
+	public UserFacade userFacadeWithKeycloakUserCalls(UserService userService) {
+		return new UserFacadeImpl(keycloakUserServiceForUsersCalls( userService));
+	}
+
+	@Bean("userFacadeWithKeycloakTechnicalCalls")
+	public UserFacade userFacadeWithKeycloakForTechnicalCalls(UserService userService, AccessTokenForTechnicalCallsInterceptor interceptor) {
+		return new UserFacadeImpl(keycloakUserServiceForTechnicalCalls(interceptor, userService));
 	}
 }

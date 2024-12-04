@@ -24,12 +24,14 @@ import pl.szymanski.user.service.dto.UserDTO;
 import pl.szymanski.user.service.exception.DuplicatedUserException;
 import pl.szymanski.user.service.facade.UserFacade;
 
+import javax.annotation.Resource;
+
 @RestController
 @RequestMapping("/users")
 @Tag(name = "Accounts operations")
 public class UserController {
 
-	@Autowired
+	@Resource(name = "userFacadeWithKeycloakUserCalls")
 	public UserFacade userFacade;
 
 

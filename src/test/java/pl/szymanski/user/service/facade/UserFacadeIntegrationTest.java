@@ -5,16 +5,17 @@ import io.swagger.client.model.CredentialRepresentation;
 import io.swagger.client.model.UserRepresentation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
 import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.dto.AddUserDTO;
+import pl.szymanski.user.service.dto.RegisterUserDTO;
 import pl.szymanski.user.service.exception.DuplicatedUserException;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
 import pl.szymanski.user.service.matcher.UserRepresentationMatcher;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest
 public class UserFacadeIntegrationTest {
 
-	@Autowired
+	@Resource(name = "userFacadeWithKeycloakUserCalls")
 	private UserFacade userFacade;
 
 	@MockBean(name = "keycloakUserServiceForApiCalls")
@@ -79,5 +80,54 @@ public class UserFacadeIntegrationTest {
 		addUserDTO.setEmail("admin@biblioteka.com");
 
 		Assertions.assertThrows(DuplicatedUserException.class, () -> userFacade.addUser(addUserDTO));
+	}
+
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void shouldSendRegistrationRequest() throws ApiException {
+		// given
+		RegisterUserDTO registerUserDTO = new RegisterUserDTO();
+		registerUserDTO.setName("firstName");
+		registerUserDTO.setLastName("lastName");
+		registerUserDTO.setEmail("test@test.com");
+		registerUserDTO.setPhone("111111");
+		registerUserDTO.setAddressLine1("test address");
+		registerUserDTO.setPostalCode("1111");
+		registerUserDTO.setTown("test Town");
+		registerUserDTO.setDayOfBirth("1990-01-01");
+		registerUserDTO.setPassword("examplePassword");
+
+		userFacade.registerUser(registerUserDTO);
+
+		UserRepresentation userRepresentation = new UserRepresentation();
+		userRepresentation.setEmail("test@test.com");
+		userRepresentation.setUsername("test@test.com");
+		userRepresentation.setGroups(List.of("/ROLE_USER"));
+		userRepresentation.setFirstName("firstName");
+		userRepresentation.setLastName("lastName");
+		HashMap<String, List<String>> attributes = new HashMap<>();
+		attributes.put("phone", List.of("111111"));
+		attributes.put("addressLine1", List.of("test address"));
+		attributes.put("postalCode", List.of("1111"));
+		attributes.put("town", List.of("test Town"));
+		attributes.put("dayOfBirth", List.of("1990-01-01"));
+		userRepresentation.enabled(true);
+		userRepresentation.emailVerified(true);
+		final CredentialRepresentation credential = new CredentialRepresentation();
+		credential.setType(ApplicationConstants.KeyCloak.CREDENTIAL_TYPE_PASSWORD);
+		credential.setValue("examplePassword");
+		userRepresentation.setCredentials(Collections.singletonList(credential));
+
+		userRepresentation.setAttributes(attributes);
+		verify(keycloakUserService).createUser(argThat(new UserRepresentationMatcher(userRepresentation)));
+	}
+
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void shouldThrowDuplicatedUserDuringRegistrationException() throws ApiException {
+		RegisterUserDTO registerUserDTO = new RegisterUserDTO();
+		registerUserDTO.setEmail("admin@biblioteka.com");
+
+		Assertions.assertThrows(DuplicatedUserException.class, () -> userFacade.registerUser(registerUserDTO));
 	}
 }

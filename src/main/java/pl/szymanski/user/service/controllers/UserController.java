@@ -94,6 +94,6 @@ public class UserController {
 		} catch (ApiException e) {
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e.getResponseBody());
 		}
-		return ResponseEntity.status(HttpStatus.OK).body("OK");
+		return ResponseEntity.status(HttpStatus.CREATED).body("OK");
 	}
 }

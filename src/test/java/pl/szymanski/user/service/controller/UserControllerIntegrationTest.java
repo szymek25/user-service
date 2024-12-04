@@ -186,6 +186,18 @@ public class UserControllerIntegrationTest {
 
 	}
 
+	@Test
+	@Sql(scripts = "/scripts/users.sql")
+	public void shouldAddNewUser() throws Exception {
+		final AddUserDTO dto = createAddUserDTO("test1@test.com");
+
+		when(keycloakUserService.createUser(any())).thenReturn(true);
+
+		this.mockMvc.perform(post("/users/add").contentType("application/json").content(objectMapper.writeValueAsString(dto)))
+				.andExpect(status().isCreated())
+				.andExpect(content().string("OK"));
+	}
+
 	private static AddUserDTO createAddUserDTO(String email) {
 		final AddUserDTO dto = new AddUserDTO();
 		dto.setEmail(email);

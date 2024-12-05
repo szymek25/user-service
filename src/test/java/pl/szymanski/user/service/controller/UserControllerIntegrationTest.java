@@ -18,6 +18,8 @@ import org.springframework.web.context.WebApplicationContext;
 import pl.szymanski.user.service.constants.ApplicationConstants;
 import pl.szymanski.user.service.dto.AddUserDTO;
 import pl.szymanski.user.service.keycloak.api.KeycloakUserService;
+import pl.szymanski.user.service.model.User;
+import pl.szymanski.user.service.service.UserService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -40,6 +42,9 @@ public class UserControllerIntegrationTest {
 
 	@MockBean(name = "keycloakUserServiceForApiCalls")
 	private KeycloakUserService keycloakUserService;
+
+	@Autowired
+	private UserService userService;
 
 	@BeforeEach
 	public void setup() throws Exception {
@@ -98,11 +103,12 @@ public class UserControllerIntegrationTest {
 	@Test
 	@Sql(scripts = "/scripts/users.sql")
 	public void shouldReturnUserById() throws Exception {
-		final String id = "aa183f01-9487-437e-9d40-6665286fd641";
+		User user = userService.findByEmail("admin@biblioteka.com");
+		final int id = user.getId();
 		MvcResult mvcResult = this.mockMvc.perform(get("/users/" + id))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("keycloakId").value(id))
+				.andExpect(jsonPath("id").value(id))
 				.andExpect(jsonPath("email").value("admin@biblioteka.com"))
 				.andReturn();
 	}
@@ -110,7 +116,7 @@ public class UserControllerIntegrationTest {
 	@Test
 	@Sql(scripts = "/scripts/users.sql")
 	public void shouldReturn404WhenUserNotFound() throws Exception {
-		final String id = "ssss-aaaa";
+		final String id = "1000";
 		this.mockMvc.perform(get("/users/" + id))
 				.andExpect(status().isNotFound());
 	}

@@ -7,10 +7,10 @@
     {
       "name": "id",
       "type": {
-        "type": "string",
-        "avro.java.string": "String"
+        "type": "int",
+        "avro.java.int": "int"
       },
-      "doc": "User keycloak ID"
+      "doc": "User ID"
     },
     {
       "name": "email",

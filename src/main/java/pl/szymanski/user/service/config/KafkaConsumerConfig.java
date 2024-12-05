@@ -3,6 +3,7 @@ package pl.szymanski.user.service.config;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +44,7 @@ public class KafkaConsumerConfig {
 				groupId);
 		props.put(
 				ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-				StringDeserializer.class);
+				IntegerDeserializer.class);
 		props.put(
 				ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
 				StringDeserializer.class);
@@ -60,27 +61,27 @@ public class KafkaConsumerConfig {
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, UpdateUserEvent>
+	public ConcurrentKafkaListenerContainerFactory<Integer, UpdateUserEvent>
 	userUpdatesContainerFactor() {
-		ConcurrentKafkaListenerContainerFactory<String, UpdateUserEvent> factory =
+		ConcurrentKafkaListenerContainerFactory<Integer, UpdateUserEvent> factory =
 				new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(getAvroOptions()));
 		return factory;
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, RemoveUserEvent>
+	public ConcurrentKafkaListenerContainerFactory<Integer, RemoveUserEvent>
 	userRemovesContainerFactor() {
-		ConcurrentKafkaListenerContainerFactory<String, RemoveUserEvent> factory =
+		ConcurrentKafkaListenerContainerFactory<Integer, RemoveUserEvent> factory =
 				new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(getAvroOptions()));
 		return factory;
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, UpdatePasswordEvent>
+	public ConcurrentKafkaListenerContainerFactory<Integer, UpdatePasswordEvent>
 	updatePasswordContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, UpdatePasswordEvent> factory =
+		ConcurrentKafkaListenerContainerFactory<Integer, UpdatePasswordEvent> factory =
 				new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(getAvroOptions()));
 		return factory;

@@ -9,7 +9,7 @@ import pl.szymanski.user.service.model.User;
 
 import java.util.List;
 
-public interface UserDao extends CrudRepository<User, String> {
+public interface UserDao extends CrudRepository<User, Integer> {
 
 	@Query("SELECT u FROM User u WHERE u.keycloakId IN :ids")
 	List<User> findAllByKeycloakId(List<String> ids);

@@ -63,7 +63,7 @@ public class UserController {
 	@Operation(summary = "Get user by id")
 	@ApiResponse(responseCode = "200", description = "Get user by id", content = @Content(schema = @Schema(implementation = UserDTO.class)))
 	@ApiResponse(responseCode = "404", description = "User not found")
-	public @ResponseBody ResponseEntity<UserDTO> getUserById(@PathVariable("id") String id) {
+	public @ResponseBody ResponseEntity<UserDTO> getUserById(@PathVariable("id") int id) {
 		UserDTO user = userFacade.findUserById(id);
 		if(user == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

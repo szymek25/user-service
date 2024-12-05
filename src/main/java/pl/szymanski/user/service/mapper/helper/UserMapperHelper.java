@@ -36,4 +36,6 @@ public interface UserMapperHelper {
 
 	List<String> mapUserRoleGroup();
 
+	String mapKeycloakId(int id);
+
 }

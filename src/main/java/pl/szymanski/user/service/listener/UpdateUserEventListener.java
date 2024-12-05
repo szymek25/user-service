@@ -40,7 +40,7 @@ public class UpdateUserEventListener {
 		log.debug("Received user update event: {}", event);
 		final User userToBeUpdated = userUpdateUserEventMapper.map(event);
 		keycloakUserService.updateUser(userMapper.mapToUserRepresentation(userToBeUpdated));
-		keycloakUserService.assignRole(event.getId(), event.getRoleId());
+		keycloakUserService.assignRole(userToBeUpdated.getKeycloakId(), event.getRoleId());
 	}
 
 }

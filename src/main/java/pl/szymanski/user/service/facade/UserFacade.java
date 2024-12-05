@@ -15,7 +15,7 @@ public interface UserFacade {
 
 	Page<UserDTO> findAllUsers(int currentPage, int pageSize);
 
-	UserDTO findUserById(String id);
+	UserDTO findUserById(int id);
 
 	UserDTO findUserByEmail(String email);
 

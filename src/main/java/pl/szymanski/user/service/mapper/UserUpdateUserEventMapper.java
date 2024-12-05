@@ -12,8 +12,7 @@ public abstract class UserUpdateUserEventMapper {
 
 	@Autowired
 	protected UserMapperHelper helper;
-	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "keycloakId", source = "id")
+	@Mapping(target = "keycloakId", expression = "java(helper.mapKeycloakId(event.getId()))")
 	@Mapping(target = "role", expression = "java(helper.mapRole(event))")
 	@Mapping(target = "dayOfBirth", expression = "java(java.sql.Date.valueOf(event.getDayOfBirth()))")
 	public abstract User map(UpdateUserEvent event);

@@ -60,8 +60,8 @@ public class UserFacadeImpl implements UserFacade {
 	}
 
 	@Override
-	public UserDTO findUserById(String id) {
-		final User user = userService.findByKeycloakId(id);
+	public UserDTO findUserById(int id) {
+		final User user = userService.findById(id);
 		return userUserDTOMapper.mapToUserDTO(user);
 	}
 

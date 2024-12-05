@@ -15,6 +15,7 @@ import pl.szymanski.user.service.mapper.helper.UserMapperHelper;
 import pl.szymanski.user.service.model.Role;
 import pl.szymanski.user.service.model.User;
 import pl.szymanski.user.service.service.RoleService;
+import pl.szymanski.user.service.service.UserService;
 
 import java.sql.Date;
 import java.util.HashMap;
@@ -28,6 +29,9 @@ public class UserMapperHelperImpl implements UserMapperHelper {
 
 	@Autowired
 	private RoleService roleService;
+
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public String mapStringAttribute(UserRepresentation userRepresentation, String attributeName) {
@@ -133,6 +137,12 @@ public class UserMapperHelperImpl implements UserMapperHelper {
 			return createGroupList(role);
 		}
 		return List.of();
+	}
+
+	@Override
+	public String mapKeycloakId(int id) {
+		User user = userService.findById(id);
+		return user.getKeycloakId();
 	}
 
 	private List<String> createGroupList(Role role) {
